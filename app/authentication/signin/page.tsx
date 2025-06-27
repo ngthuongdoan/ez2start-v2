@@ -18,13 +18,14 @@ import { Surface } from '@/components';
 import classes from './page.module.css';
 import { useForm } from '@mantine/form';
 import { useRouter } from 'next/navigation';
+import { notifications } from '@mantine/notifications';
+import { useSignin } from '@/hooks/auth/useSignin';
 
 const LINK_PROPS: TextProps = {
   className: classes.link,
 };
 
 function Page() {
-  const { push } = useRouter();
   const form = useForm({
     initialValues: { email: 'demo@email.com', password: 'Demo@123' },
 
@@ -36,7 +37,9 @@ function Page() {
           ? 'Password must include at least 6 characters'
           : null,
     },
-  });
+  });   
+
+  const { handleSubmit, isPending } = useSignin();
 
   return (
     <>
@@ -52,9 +55,7 @@ function Page() {
 
       <Surface component={Paper} className={classes.card}>
         <form
-          onSubmit={form.onSubmit(() => {
-            push(PATH_DASHBOARD.default);
-          })}
+          onSubmit={form.onSubmit(handleSubmit)}
         >
           <TextInput
             label="Email"
@@ -85,7 +86,7 @@ function Page() {
               Forgot password?
             </Text>
           </Group>
-          <Button fullWidth mt="xl" type="submit">
+          <Button fullWidth mt="xl" type="submit" loading={isPending} disabled={isPending}>
             Sign in
           </Button>
         </form>

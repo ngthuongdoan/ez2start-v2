@@ -1,12 +1,14 @@
 'use client';
 
 import { AppShell, Container, rem, useMantineTheme } from '@mantine/core';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import AppMain from '@/components/AppMain';
 import Navigation from '@/components/Navigation';
 import HeaderNav from '@/components/HeaderNav';
 import FooterNav from '@/components/FooterNav';
+import { useAuthCheck } from '@/hooks/useAuthCheck';
+import Loading from '../loading';
 
 type Props = {
   children: ReactNode;
@@ -17,7 +19,10 @@ function DashboardLayout({ children }: Props) {
   const tablet_match = useMediaQuery('(max-width: 768px)');
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
-
+  const isChecking = useAuthCheck({ requireAuth: true }); 
+  if (isChecking) {
+    return <Loading /> // Or null, or whatever loading state you prefer
+  }
   return (
     <AppShell
       layout="alt"

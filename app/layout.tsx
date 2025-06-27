@@ -12,6 +12,10 @@ import '@mantine/carousel/styles.css';
 import '@mantine/notifications/styles.css';
 import 'mantine-datatable/styles.layer.css';
 import './globals.css';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
+import { getQueryClient } from '@/utils/get-query-client';
 
 // If loading a variable font, you don't need to specify the font weight
 const openSans = Open_Sans({
@@ -23,6 +27,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const queryClient = getQueryClient()
   return (
     <html lang="en" className={openSans.className}>
       <head>
@@ -61,10 +66,15 @@ export default function RootLayout({
         <ColorSchemeScript defaultColorScheme="auto" />
       </head>
       <body>
-        <MantineProvider theme={myTheme} defaultColorScheme="light">
-          <Notifications position="bottom-right" zIndex={1000} />
-          <ModalsProvider>{children}</ModalsProvider>
-        </MantineProvider>
+        <QueryClientProvider client={queryClient}>
+          {/* The rest of your application */}
+          <MantineProvider theme={myTheme} defaultColorScheme="light">
+            <Notifications position="bottom-right" zIndex={1000} />
+            <ModalsProvider>{children}</ModalsProvider>
+          </MantineProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+
       </body>
     </html>
   );
