@@ -1,5 +1,8 @@
 'use client';
 
+import { Surface } from '@/components';
+import { useSignin } from '@/hooks/auth/useSignin';
+import { PATH_AUTH } from '@/routes';
 import {
   Button,
   Center,
@@ -12,27 +15,23 @@ import {
   TextProps,
   Title,
 } from '@mantine/core';
-import Link from 'next/link';
-import { PATH_AUTH, PATH_DASHBOARD } from '@/routes';
-import { Surface } from '@/components';
-import classes from './page.module.css';
 import { useForm } from '@mantine/form';
-import { useRouter } from 'next/navigation';
-import { notifications } from '@mantine/notifications';
-import { useSignin } from '@/hooks/auth/useSignin';
+import Link from 'next/link';
+import classes from './page.module.css';
+import { LoginBody } from '@/@types/auth';
 
 const LINK_PROPS: TextProps = {
   className: classes.link,
 };
 
 function Page() {
-  const form = useForm({
+  const form = useForm<LoginBody>({
     initialValues: { email: 'demo@email.com', password: 'Demo@123' },
 
     // functions will be used to validate values at corresponding key
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-      password: (value) =>
+      email: (value: string) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+      password: (value: string) =>
         value && value?.length < 6
           ? 'Password must include at least 6 characters'
           : null,
