@@ -1,5 +1,3 @@
-'use client';
-
 import { Center, Stack } from '@mantine/core';
 import Image from 'next/image';
 import React, { ReactNode } from 'react';

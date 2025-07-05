@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { removeTokenCookie } from "@/lib/cookies";
+import { removeTokenCookie } from "@/lib/cookies-server";
 
 export async function POST() {
   removeTokenCookie();

@@ -1,19 +1,20 @@
-import { cookies } from "next/headers";
+// Client-side cookie utilities using cookies-next
+import { getCookie, setCookie, deleteCookie } from 'cookies-next';
 
-export function setTokenCookie(token: string) {
-  cookies().set("token", token, {
-    httpOnly: true,
-    path: "/",
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+export function setTokenCookieClient(token: string) {
+  setCookie('token', token, {
+    httpOnly: false, // Client-side accessible
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
 }
 
-export function removeTokenCookie() {
-  cookies().set("token", "", { maxAge: -1, path: "/" });
+export function removeTokenCookieClient() {
+  deleteCookie('token', { path: '/' });
 }
 
-export function getTokenCookie() {
-  return cookies().get("token")?.value;
+export function getTokenCookieClient() {
+  return getCookie('token') as string | undefined;
 }

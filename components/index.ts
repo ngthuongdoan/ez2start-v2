@@ -33,6 +33,8 @@ import Surface from '@/components/Surface';
 import TextEditor from '@/components/TextEditor';
 import UserButton from '@/components/UserButton';
 import ErrorAlert from '@/components/ErrorAlert';
+export { UserInfo } from './UserInfo';
+export { LogoutButton } from './LogoutButton';
 
 export {
   Logo,

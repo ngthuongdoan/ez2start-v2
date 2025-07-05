@@ -4,6 +4,7 @@ import { createMutation } from "@/utils/create-mutation";
 import { notifications } from "@mantine/notifications";
 import { UseMutationOptions } from '@tanstack/react-query';
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function useLoginMutation(options?: UseMutationOptions<unknown, unknown, LoginBody>) {
   return createMutation<LoginBody>(
@@ -25,17 +26,22 @@ export function useLoginMutation(options?: UseMutationOptions<unknown, unknown, 
 export const useSignin = () => {
   const router = useRouter();
 
-  const { mutateAsync: login, isPending } = useLoginMutation();
+  const { mutateAsync: login, isPending, isSuccess } = useLoginMutation();
 
   const handleSubmit = async (values: LoginBody) => {
     try {
       await login(values);
-      notifications.show({ message: 'Login successful', color: 'green' });
-      router.push(PATH_DASHBOARD.default);
     } catch (error: any) {
       notifications.show({ message: error.message, color: 'red' });
     }
   };
+
+  useEffect(() => {
+    if (isSuccess && !isPending) {
+      notifications.show({ message: 'Login successful', color: 'green' });
+      router.push(PATH_DASHBOARD.default);
+    }
+  }, [isSuccess, isPending]);
 
   return { handleSubmit, isPending };
 }

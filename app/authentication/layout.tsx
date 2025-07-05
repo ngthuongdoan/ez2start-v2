@@ -1,19 +1,16 @@
-'use client';
-
-import { useAuthCheck } from '@/hooks/useAuthCheck';
 import React, { ReactNode } from 'react';
-import Loading from '../loading';
+import { AuthWrapper } from '@/components/AuthWrapper';
 
 type AuthProps = {
   children: ReactNode;
 };
 
 function AuthLayout({ children }: AuthProps) {
-  const isChecking = useAuthCheck({ requireAuth: false });
-  if (isChecking) {
-    return <Loading /> // Optionally, you can return a loading state here
-  }
-  return <>{children}</>;
+  return (
+    <AuthWrapper requireAuth={false} redirectAuthenticatedFromPublic={true}>
+      {children}
+    </AuthWrapper>
+  );
 }
 
 export default AuthLayout;

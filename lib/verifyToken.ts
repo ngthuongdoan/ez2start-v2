@@ -1,5 +1,5 @@
 import { adminAuth } from "./firebaseAdmin";
-import { getTokenCookie } from "./cookies";
+import { getTokenCookie } from "./cookies-server";
 
 export async function verifyServerSession() {
   const token = getTokenCookie();

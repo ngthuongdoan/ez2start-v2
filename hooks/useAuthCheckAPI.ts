@@ -1,41 +1,41 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { PATH_AUTH, PATH_DASHBOARD } from '@/routes';
-import { getCookie } from 'cookies-next';
 
 /**
- * Hook for authentication checking with flexible redirection behavior
+ * Hook for authentication checking using API route
  * @param {Object} options - Configuration options
  * @param {boolean} options.requireAuth - If true, redirect to login when not authenticated
  * @param {boolean} options.redirectAuthenticatedFromPublic - If true, redirect already authenticated users from public pages
  * @param {string} options.redirectTo - Custom redirect path for unauthenticated users
- * @returns {boolean} - Whether authentication check is in progress
+ * @returns {Object} - Authentication status and user data
  */
-export function useAuthCheck({
+export function useAuthCheckAPI({
   requireAuth = false,
   redirectAuthenticatedFromPublic = true,
   redirectTo = PATH_AUTH.signin
 } = {}) {
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(true);
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        let authToken: string | undefined = undefined;
-        if (typeof window !== 'undefined') {
-          authToken = getCookie('token') as string | undefined;
-          console.log('Auth token from cookie:', authToken ? 'Present' : 'Not found');
-        }
+        const response = await fetch('/api/auth/check');
+        const data = await response.json();
 
-        const isAuthenticated = Boolean(authToken);
-        console.log('Is authenticated:', isAuthenticated);
+        setIsAuthenticated(data.isAuthenticated);
+        setUser(data.user);
 
-        if (requireAuth && !isAuthenticated) {
-        // Protected route, no auth token - redirect to login
-          console.log('Redirecting to login - no auth token');
+        console.log('Auth check result:', data);
+
+        if (requireAuth && !data.isAuthenticated) {
+          // Protected route, no auth token - redirect to login
+          console.log('Redirecting to login - not authenticated');
           router.replace(redirectTo);
-        } else if (!requireAuth && isAuthenticated && redirectAuthenticatedFromPublic) {
+        } else if (!requireAuth && data.isAuthenticated && redirectAuthenticatedFromPublic) {
           // Public route, user is already authenticated - redirect to dashboard
           console.log('Redirecting to dashboard - user already authenticated');
           router.replace(PATH_DASHBOARD.default);
@@ -51,6 +51,8 @@ export function useAuthCheck({
         }
       } catch (error) {
         console.error('Auth check error:', error);
+        setIsAuthenticated(false);
+        setUser(null);
         setIsChecking(false);
       }
     };
@@ -58,6 +60,5 @@ export function useAuthCheck({
     checkAuth();
   }, [router, requireAuth, redirectAuthenticatedFromPublic, redirectTo]);
 
-  // Return whether we're still checking/redirecting
-  return isChecking;
+  return { isChecking, isAuthenticated, user };
 }

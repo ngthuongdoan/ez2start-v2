@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { setTokenCookie } from "@/lib/cookies";
+import { setTokenCookie } from "@/lib/cookies-server";
 
 export async function POST(req: NextRequest) {
   const { email, password } = await req.json();
