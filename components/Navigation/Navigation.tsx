@@ -23,7 +23,8 @@ import {
   IconUserShield,
   IconX,
 } from '@tabler/icons-react';
-import { Logo, UserProfileButton } from '@/components';
+import { Logo } from '@/components';
+import FirebaseUserButtonWithMenu from '@/components/UserButton/FirebaseUserButtonWithMenu';
 import {
   PATH_ABOUT,
   PATH_APPS,
@@ -32,7 +33,6 @@ import {
   PATH_DOCS,
   PATH_PAGES,
 } from '@/routes';
-import UserProfileData from '@/public/mocks/UserProfile.json';
 import { useMediaQuery } from '@mantine/hooks';
 import classes from './Navigation.module.css';
 import { LinksGroup } from '@/components/Navigation/Links/Links';
@@ -175,11 +175,7 @@ const Navigation = ({ onClose }: NavigationProps) => {
       </ScrollArea>
 
       <div className={classes.footer}>
-        <UserProfileButton
-          email={UserProfileData.email}
-          image={UserProfileData.avatar}
-          name={UserProfileData.name}
-        />
+        <FirebaseUserButtonWithMenu showMenu={true} />
       </div>
     </nav>
   );
