@@ -4,6 +4,7 @@ import {
   ActionIcon,
   Anchor,
   Badge,
+  CardProps,
   Container,
   Flex,
   Grid,
@@ -19,6 +20,7 @@ import {
 import { PATH_DASHBOARD } from '@/routes';
 import {
   PageHeader,
+  ProfileSettingsCard,
   ProfileStatsCard,
   ProjectsTable,
   RevenueChart,
@@ -175,6 +177,7 @@ function Profile() {
                     </UnstyledButton>
                   </Flex>
                 </Surface>
+                <ProfileSettingsCard {...PAPER_PROPS as CardProps} />
               </Stack>
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 7, lg: 8 }}>

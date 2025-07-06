@@ -12,6 +12,7 @@ import {
 } from '@mantine/core';
 import { IconChevronRight, IconLogout, IconSettings } from '@tabler/icons-react';
 import { useServerAuth } from '@/hooks/useServerAuth';
+import { useUserProfile } from '@/hooks/useUserProfile';
 import { useRouter } from 'next/navigation';
 import { PATH_AUTH } from '@/routes';
 import classes from './UserButton.module.css';
@@ -29,13 +30,22 @@ const FirebaseUserButtonWithMenu = ({
   ...others
 }: FirebaseUserButtonWithMenuProps) => {
   const { user, isAuthenticated } = useServerAuth();
+  const { profile } = useUserProfile();
   const router = useRouter();
 
   if (!isAuthenticated || !user) {
     return null;
   }
 
-  const displayName = user.name || user.email?.split('@')[0] || 'User';
+  // Use profile data if available, fallback to user data
+  const displayName = profile?.displayName || 
+                     profile?.firstName && profile?.lastName 
+                       ? `${profile.firstName} ${profile.lastName}`
+                       : user.name || 
+                         user.email?.split('@')[0] || 
+                         'User';
+  
+  const photoURL = profile?.photoURL || user.photoURL;
   const avatarLetter = displayName.charAt(0).toUpperCase();
 
   const handleLogout = async () => {
@@ -52,8 +62,8 @@ const FirebaseUserButtonWithMenu = ({
   const userButton = (
     <UnstyledButton className={classes.user} {...others}>
       <Group>
-        <Avatar src={user.photoURL || null} radius="xl">
-          {!user.photoURL && avatarLetter}
+        <Avatar src={photoURL || null} radius="xl">
+          {!photoURL && avatarLetter}
         </Avatar>
 
         <div style={{ flex: 1 }}>

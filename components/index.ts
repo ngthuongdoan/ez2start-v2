@@ -36,6 +36,7 @@ import ErrorAlert from '@/components/ErrorAlert';
 export { UserInfo } from './UserInfo';
 export { LogoutButton } from './LogoutButton';
 export { default as FirebaseUserButton } from './UserButton/FirebaseUserButton';
+export { ProfileSettingsCard } from './ProfileSettingsCard';
 
 export {
   Logo,
