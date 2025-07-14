@@ -54,6 +54,7 @@ const mockdata = [
     title: 'Apps',
     links: [
       { label: 'Profile', icon: IconUserCircle, link: PATH_APPS.profile },
+      { label: 'Employee', icon: IconUserCode, link: PATH_APPS.employee },
       { label: 'Settings', icon: IconUserCode, link: PATH_APPS.settings },
       { label: 'Chat', icon: IconMessages, link: PATH_APPS.chat },
       { label: 'Projects', icon: IconBriefcase, link: PATH_APPS.projects },

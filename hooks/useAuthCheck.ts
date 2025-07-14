@@ -18,39 +18,26 @@ export function useAuthCheck({
 } = {}) {
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(true);
-
   useEffect(() => {
     const checkAuth = async () => {
       try {
         let authToken: string | undefined = undefined;
         if (typeof window !== 'undefined') {
           authToken = getCookie('token') as string | undefined;
-          console.log('Auth token from cookie:', authToken ? 'Present' : 'Not found');
-        }
+      }
 
         const isAuthenticated = Boolean(authToken);
-        console.log('Is authenticated:', isAuthenticated);
 
         if (requireAuth && !isAuthenticated) {
         // Protected route, no auth token - redirect to login
-          console.log('Redirecting to login - no auth token');
-          router.replace(redirectTo);
-        } else if (!requireAuth && isAuthenticated && redirectAuthenticatedFromPublic) {
-          // Public route, user is already authenticated - redirect to dashboard
-          console.log('Redirecting to dashboard - user already authenticated');
-          router.replace(PATH_DASHBOARD.default);
-        } else {
-          // Authentication status matches route requirements, continue rendering
-          if (router && typeof window !== 'undefined' && window.location.pathname === '/') {
-            console.log('Redirecting from root to dashboard');
-            router.replace(PATH_DASHBOARD.default);
-          } else {
-            console.log('Authentication check complete - allowing access');
-            setIsChecking(false);
-          }
-        }
+        router.replace(redirectTo);
+      } else if (!requireAuth && isAuthenticated && redirectAuthenticatedFromPublic) {
+        // Public route, user is already authenticated - stay on current route
+        setIsChecking(false);
+      } else {
+        setIsChecking(false);
+      }
       } catch (error) {
-        console.error('Auth check error:', error);
         setIsChecking(false);
       }
     };

@@ -44,9 +44,10 @@ export function useServerAuth({
           return;
         }
 
+        // If authenticated, stay on current page (no redirect)
         if (!requireAuth && data.isAuthenticated && redirectAuthenticatedFromPublic) {
-          // Public route, user is authenticated - redirect to dashboard
-          router.replace(PATH_DASHBOARD.default);
+          // Do nothing, stay on current page
+          setIsLoading(false);
           return;
         }
 

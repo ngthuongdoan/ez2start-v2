@@ -16,17 +16,12 @@ export async function AuthWrapper({
   redirectTo = PATH_AUTH.signin
 }: AuthWrapperProps) {
   const authStatus = await getServerAuthStatus();
-  
   if (requireAuth && !authStatus.isAuthenticated) {
     // Protected route, no auth - redirect to login
     redirect(redirectTo);
   }
-  
-  if (!requireAuth && authStatus.isAuthenticated && redirectAuthenticatedFromPublic) {
-    // Public route, user is authenticated - redirect to dashboard
-    redirect(PATH_DASHBOARD.default);
-  }
-  
+
+  // If authenticated, do not redirect; stay on current route
   return <>{children}</>;
 }
 

@@ -36,18 +36,11 @@ export function useAuthCheckAPI({
           console.log('Redirecting to login - not authenticated');
           router.replace(redirectTo);
         } else if (!requireAuth && data.isAuthenticated && redirectAuthenticatedFromPublic) {
-          // Public route, user is already authenticated - redirect to dashboard
-          console.log('Redirecting to dashboard - user already authenticated');
-          router.replace(PATH_DASHBOARD.default);
+          // Public route, user is already authenticated - do NOT redirect, stay on current route
+          setIsChecking(false);
         } else {
           // Authentication status matches route requirements, continue rendering
-          if (router && typeof window !== 'undefined' && window.location.pathname === '/') {
-            console.log('Redirecting from root to dashboard');
-            router.replace(PATH_DASHBOARD.default);
-          } else {
-            console.log('Authentication check complete - allowing access');
-            setIsChecking(false);
-          }
+          setIsChecking(false);
         }
       } catch (error) {
         console.error('Auth check error:', error);
