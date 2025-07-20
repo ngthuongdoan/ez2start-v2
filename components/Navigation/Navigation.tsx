@@ -20,6 +20,7 @@ import {
   IconUserCircle,
   IconUserCode,
   IconUserPlus,
+  IconUsers,
   IconUserShield,
   IconX,
 } from '@tabler/icons-react';
@@ -42,19 +43,19 @@ const mockdata = [
     title: 'Dashboard',
     links: [
       { label: 'Default', icon: IconChartBar, link: PATH_DASHBOARD.default },
-      {
-        label: 'Analytics',
-        icon: IconChartInfographic,
-        link: PATH_DASHBOARD.analytics,
-      },
-      { label: 'SaaS', icon: IconChartArcs3, link: PATH_DASHBOARD.saas },
+      // {
+      //   label: 'Analytics',
+      //   icon: IconChartInfographic,
+      //   link: PATH_DASHBOARD.analytics,
+      // },
+      // { label: 'SaaS', icon: IconChartArcs3, link: PATH_DASHBOARD.saas },
     ],
   },
   {
     title: 'Apps',
     links: [
       { label: 'Profile', icon: IconUserCircle, link: PATH_APPS.profile },
-      { label: 'Employee', icon: IconUserCode, link: PATH_APPS.employee },
+      { label: 'Employee', icon: IconUsers, link: PATH_APPS.employee },
       { label: 'Settings', icon: IconUserCode, link: PATH_APPS.settings },
       { label: 'Chat', icon: IconMessages, link: PATH_APPS.chat },
       { label: 'Projects', icon: IconBriefcase, link: PATH_APPS.projects },
@@ -62,60 +63,10 @@ const mockdata = [
       {
         label: 'Invoices',
         icon: IconFileInvoice,
-        links: [
-          {
-            label: 'List',
-            link: PATH_APPS.invoices.all,
-          },
-          {
-            label: 'Details',
-            link: PATH_APPS.invoices.sample,
-          },
-        ],
+        link: PATH_APPS.invoices.all,
       },
-      { label: 'Tasks', icon: IconListDetails, link: PATH_APPS.tasks },
+      // { label: 'Tasks', icon: IconListDetails, link: PATH_APPS.tasks },
       { label: 'Calendar', icon: IconCalendar, link: PATH_APPS.calendar },
-    ],
-  },
-  {
-    title: 'Auth',
-    links: [
-      { label: 'Sign In', icon: IconLogin2, link: PATH_AUTH.signin },
-      { label: 'Sign Up', icon: IconUserPlus, link: PATH_AUTH.signup },
-      {
-        label: 'Reset Password',
-        icon: IconRotateRectangle,
-        link: PATH_AUTH.passwordReset,
-      },
-      { label: 'Auth0', icon: IconBrandAuth0, link: PATH_AUTH.auth0 },
-    ],
-  },
-  {
-    title: 'Pages',
-    links: [
-      { label: 'Pricing', icon: IconReceipt2, link: PATH_PAGES.pricing },
-      { label: 'Blank Page', icon: IconLayersSubtract, link: PATH_PAGES.blank },
-    ],
-  },
-  {
-    title: 'Documentation',
-    links: [
-      {
-        label: 'About',
-        icon: IconExclamationCircle,
-        link: PATH_ABOUT.root,
-      },
-      {
-        label: 'Getting started',
-        icon: IconLifebuoy,
-        link: PATH_DOCS.root,
-      },
-      {
-        label: 'Documentation',
-        icon: IconBook2,
-        link: PATH_DOCS.root,
-      },
-      { label: 'Changelog', icon: IconList },
     ],
   },
 ];

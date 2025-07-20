@@ -33,6 +33,7 @@ import Surface from '@/components/Surface';
 import TextEditor from '@/components/TextEditor';
 import UserButton from '@/components/UserButton';
 import ErrorAlert from '@/components/ErrorAlert';
+import EmployeeModal from './EmployeeModal/EmployeeModal';
 export { UserInfo } from './UserInfo';
 export { LogoutButton } from './LogoutButton';
 export { default as FirebaseUserButton } from './UserButton/FirebaseUserButton';
@@ -76,4 +77,5 @@ export {
   TextEditor,
   UserButton,
   ErrorAlert,
+  EmployeeModal,
 };

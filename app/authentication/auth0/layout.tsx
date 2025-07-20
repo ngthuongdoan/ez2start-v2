@@ -23,7 +23,6 @@ function Auth0Layout({ children }: Props) {
     <AppShell
       layout="alt"
       header={{ height: 60 }}
-      footer={{ height: 60 }}
       navbar={{
         width: 300,
         breakpoint: 'md',
@@ -55,11 +54,6 @@ function Auth0Layout({ children }: Props) {
           <Providers>{children}</Providers>
         </AppMain>
       </AppShell.Main>
-      <AppShell.Footer p="md">
-        <Container fluid px="lg">
-          <FooterNav />
-        </Container>
-      </AppShell.Footer>
     </AppShell>
   );
 }

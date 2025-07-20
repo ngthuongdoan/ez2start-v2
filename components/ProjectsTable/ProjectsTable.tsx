@@ -51,6 +51,11 @@ const ProjectsTable = ({ data, error, loading }: ProjectsTableProps) => {
     <ErrorAlert title="Error loading projects" message={error.toString()} />
   ) : (
     <DataTable
+      styles={{
+        table: {
+          height: 'auto !important',
+        }
+      }}
       verticalSpacing="sm"
       highlightOnHover
       columns={[

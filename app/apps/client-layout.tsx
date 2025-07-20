@@ -22,7 +22,6 @@ function AppsClientLayout({ children }: Props) {
       <AppShell
         layout="alt"
         header={{ height: 60 }}
-        footer={{ height: 60 }}
         navbar={{
           width: 300,
           breakpoint: 'md',
@@ -49,14 +48,9 @@ function AppsClientLayout({ children }: Props) {
         <AppShell.Navbar>
           <Navigation onClose={toggleMobile} />
         </AppShell.Navbar>
-        <AppShell.Main>
+        <AppShell.Main mih='100vh'>
           <AppMain>{children}</AppMain>
         </AppShell.Main>
-        <AppShell.Footer p="md">
-          <Container fluid px="lg">
-            <FooterNav />
-          </Container>
-        </AppShell.Footer>
       </AppShell>
 
   );
