@@ -17,6 +17,7 @@ import {
   IconMessages,
   IconReceipt2,
   IconRotateRectangle,
+  IconSettings,
   IconUserCircle,
   IconUserCode,
   IconUserPlus,
@@ -56,7 +57,7 @@ const mockdata = [
     links: [
       { label: 'Profile', icon: IconUserCircle, link: PATH_APPS.profile },
       { label: 'Employee', icon: IconUsers, link: PATH_APPS.employee },
-      { label: 'Settings', icon: IconUserCode, link: PATH_APPS.settings },
+      { label: 'Settings', icon: IconSettings, link: PATH_APPS.settings },
       { label: 'Chat', icon: IconMessages, link: PATH_APPS.chat },
       { label: 'Projects', icon: IconBriefcase, link: PATH_APPS.projects },
       { label: 'Orders', icon: IconListDetails, link: PATH_APPS.orders },
