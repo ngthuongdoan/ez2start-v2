@@ -19,8 +19,8 @@ import { DocumentSnapshot } from 'firebase/firestore';
 import { DataTable, DataTableColumn } from 'mantine-datatable';
 import { useEffect, useMemo, useState } from 'react';
 
-import { FirestoreQueryOptions, FirestoreService } from './firestoreService';
 import { TableLayoutProps } from './types';
+import { generateQueryParams } from '@/utils/generateQueryParams';
 
 export function TableLayout<T extends Record<string, any>>({
   collectionName,
@@ -116,36 +116,28 @@ export function TableLayout<T extends Record<string, any>>({
   );
 
   // Fetch data function
+  // Fetch data from Firestore using FirestoreService
   const fetchData = async (page = 1, resetData = false) => {
     setLoading(true);
+
     try {
-      const options: FirestoreQueryOptions = {
-        searchQuery: debouncedSearchQuery,
-        searchFields,
+      // Build query params for API
+      const query = generateQueryParams({
+        search: debouncedSearchQuery,
         sortField: sortStatus?.columnAccessor || 'createdAt',
         sortDirection: sortStatus?.direction || 'desc',
-        pageSize,
-        filters,
-        lastDoc: page > 1 ? lastDocs[page - 2] : undefined
-      };
+        page: page.toString(),
+        pageSize: pageSize.toString(),
+        // You can add filters here as needed
+        // ...Object.entries(filters).map(([k, v]) => `${k}=${v}`)
+      })
+      const res = await fetch(`/api/${collectionName}?${query}`);
+      const result = await res.json();
 
-      const result = await FirestoreService.getDocuments<T>(collectionName, options);
-      
-      if (resetData || page === 1) {
-        setData(result.data);
-        setLastDocs(result.lastDoc ? [result.lastDoc] : []);
-      } else {
-        setData(prev => [...prev, ...result.data]);
-        setLastDocs(prev => [...prev, result.lastDoc!]);
-      }
-      
+      setData(result.data);
       setHasMore(result.hasMore);
       setCurrentPage(page);
-      
-      // Calculate total pages (approximate for Firestore)
-      const estimatedTotal = Math.ceil((page * pageSize) / pageSize) + (result.hasMore ? 1 : 0);
-      setTotalPages(estimatedTotal);
-      
+      setTotalPages(result.totalPages || 1);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -222,7 +214,16 @@ export function TableLayout<T extends Record<string, any>>({
           columns={tableColumns}
           records={data}
           fetching={loading}
-          onRowClick={onRowClick ? ({ record }) => onRowClick(record) : undefined}
+          onRowClick={onRowClick ? ({ record, event }) => {
+            // Prevent row click if an action button was clicked
+            if (
+              event.target instanceof HTMLElement &&
+              event.target.closest('.action-icon')
+            ) {
+              return;
+            }
+            onRowClick(record);
+          } : undefined}
           sortStatus={sortStatus ?? { columnAccessor: 'createdAt' as keyof T, direction: 'desc' }}
           onSortStatusChange={handleSortStatusChange}
           minHeight={400}

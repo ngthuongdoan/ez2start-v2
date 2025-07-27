@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useId } from 'react';
 import {
   Modal,
   TextInput,
@@ -12,6 +12,8 @@ import {
   Title
 } from '@mantine/core';
 import { Employee } from '@/types/employee';
+import { CustomModal } from '@/components/CustomModal/CustomModal';
+import { notifications } from '@mantine/notifications';
 
 interface EmployeeModalProps {
   opened: boolean;
@@ -28,6 +30,7 @@ export default function EmployeeModal({
   employee = null,
   mode = 'create'
 }: EmployeeModalProps) {
+  const formId = useId();
   const [form, setForm] = useState<Employee>(() => 
     employee || {
       name: '', 
@@ -95,10 +98,10 @@ export default function EmployeeModal({
           assignedShift: ''
         });
       } else {
-        console.error(`Failed to ${mode} employee`);
+        notifications.show({ message: `Failed to ${mode} employee`, color: 'red' });
       }
-    } catch (error) {
-      console.error(`Error ${mode === 'create' ? 'creating' : 'updating'} employee:`, error);
+    } catch (error: any) {
+        notifications.show({ message: `Error ${mode === 'create' ? 'creating' : 'updating'} employee: ${error.message}`, color: 'red' });
     } finally {
       setLoading(false);
     }
@@ -111,7 +114,7 @@ export default function EmployeeModal({
   };
 
   return (
-    <Modal
+    <CustomModal
       opened={opened}
       onClose={handleClose}
       title={
@@ -123,8 +126,27 @@ export default function EmployeeModal({
       centered
       closeOnClickOutside={!loading}
       closeOnEscape={!loading}
+      actions={
+          <>
+            <Button
+              variant="outline"
+              onClick={handleClose}
+              disabled={loading}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              loading={loading}
+              loaderProps={{ type: 'dots' }}
+              form={formId}
+            >
+              {mode === 'create' ? 'Create Employee' : 'Save Changes'}
+            </Button>
+          </>
+      }
     >
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} id={formId}>
         <Stack gap="md">
           <TextInput
             label="Full Name"
@@ -223,25 +245,8 @@ export default function EmployeeModal({
             required
             disabled={loading}
           />
-          
-          <Group justify="flex-end" mt="lg">
-            <Button
-              variant="outline"
-              onClick={handleClose}
-              disabled={loading}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              loading={loading}
-              loaderProps={{ type: 'dots' }}
-            >
-              {mode === 'create' ? 'Create Employee' : 'Save Changes'}
-            </Button>
-          </Group>
         </Stack>
       </form>
-    </Modal>
+    </CustomModal>
   );
 }

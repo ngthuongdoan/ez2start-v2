@@ -1,6 +1,15 @@
 import { redirect } from 'next/navigation';
 import { getServerAuthStatus } from '@/lib/auth-server';
-import { PATH_AUTH, PATH_DASHBOARD } from '@/routes';
+import { PATH_AUTH } from '@/routes';
+
+let cachedAuthStatus: null | Awaited<ReturnType<typeof getServerAuthStatus>> = null;
+
+async function getCachedAuthStatus() {
+  if (cachedAuthStatus === null) {
+    cachedAuthStatus = await getServerAuthStatus();
+  }
+  return cachedAuthStatus;
+}
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -12,18 +21,14 @@ interface AuthWrapperProps {
 export async function AuthWrapper({
   children,
   requireAuth = false,
-  redirectAuthenticatedFromPublic = true,
   redirectTo = PATH_AUTH.signin
 }: AuthWrapperProps) {
-  const authStatus = await getServerAuthStatus();
+  const authStatus = await getCachedAuthStatus();
   if (requireAuth && !authStatus.isAuthenticated) {
-    // Protected route, no auth - redirect to login
     redirect(redirectTo);
   }
 
-  // If authenticated, do not redirect; stay on current route
   return <>{children}</>;
 }
 
-// Export a simple function to get auth status in server components
 export { getServerAuthStatus };

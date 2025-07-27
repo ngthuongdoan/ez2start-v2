@@ -12,6 +12,14 @@ export interface FirestoreQueryOptions {
 }
 
 export class FirestoreService {
+  static async getAllDocuments<T>(collectionName: string): Promise<T[]> {
+    const q = collection(db, collectionName);
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    })) as T[];
+  }
   static async getDocuments<T>(
     collectionName: string,
     options: FirestoreQueryOptions = {}

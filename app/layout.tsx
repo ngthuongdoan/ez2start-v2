@@ -16,6 +16,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { getQueryClient } from '@/utils/get-query-client';
+import NextProgressBar from 'nextjs-progressbar';
 
 // If loading a variable font, you don't need to specify the font weight
 const openSans = Open_Sans({
@@ -33,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={openSans.className}>
       <head>
-        <title>DesignSparx - Nextjs Mantine Admin Dashboard Template</title>
+        <title>ez2start</title>
         <link
           rel="apple-touch-icon"
           sizes="180x180"
@@ -68,6 +69,11 @@ export default function RootLayout({
         <ColorSchemeScript defaultColorScheme="auto" />
       </head>
       <body>
+        <NextProgressBar
+          color="#228be6"
+          height={3}
+          options={{ showSpinner: false }}
+        />
         <QueryClientProvider client={queryClient}>
           {/* The rest of your application */}
           <MantineProvider theme={myTheme} defaultColorScheme="light">
@@ -76,7 +82,6 @@ export default function RootLayout({
           </MantineProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
-
       </body>
     </html>
   );

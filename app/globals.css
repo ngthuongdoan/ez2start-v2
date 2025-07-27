@@ -3,3 +3,24 @@
 html,
 body {
 }
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cccccc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Firefox scrollbar */
+html {
+  scrollbar-width: 4px;
+  scrollbar-color: #cccccc transparent;
+}
