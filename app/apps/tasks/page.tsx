@@ -16,7 +16,7 @@ function Tasks() {
   return (
     <>
       <>
-        <title>Tasks | DesignSparx</title>
+        <title>Tasks | ez2start</title>
       </>
       <Container fluid>
         <Stack gap="lg">

@@ -52,10 +52,12 @@
     "@tiptap/pm": "^2.1.12",
     "@tiptap/react": "^2.1.12",
     "@tiptap/starter-kit": "^2.1.12",
-    "@types/node": "20.4.4",
+    "@types/node": "^24.1.0",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "apexcharts": "^3.44.0",
+    "axios": "^1.11.0",
+    "cloudinary": "^2.7.0",
     "clsx": "^2.1.1",
     "cookies-next": "^6.0.0",
     "d3-fetch": "^3.0.1",
@@ -77,7 +79,8 @@
     "react-countup": "^6.4.2",
     "react-dom": "^18.2.0",
     "react-simple-maps": "^1.0.0",
-    "typescript": "5.1.6"
+    "typescript": "5.1.6",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",

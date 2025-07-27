@@ -41,7 +41,7 @@ const PAPER_PROPS: PaperProps = {
 };
 
 const metadata: Metadata = {
-  title: 'Sample Invoice | DesignSparx',
+  title: 'Sample Invoice | ez2start',
   description:
     'Explore our versatile dashboard website template featuring a stunning array of themes and meticulously crafted components. Elevate your web project with seamless integration, customizable themes, and a rich variety of components for a dynamic user experience. Effortlessly bring your data to life with our intuitive dashboard template, designed to streamline development and captivate users. Discover endless possibilities in design and functionality today!',
 };
@@ -50,7 +50,7 @@ function SampleInvoiceDetails() {
   return (
     <>
       <>
-        <title>Sample Invoice Details | DesignSparx</title>
+        <title>Sample Invoice Details | ez2start</title>
         <meta
           name="description"
           content="Explore our versatile dashboard website template featuring a stunning array of themes and meticulously crafted components. Elevate your web project with seamless integration, customizable themes, and a rich variety of components for a dynamic user experience. Effortlessly bring your data to life with our intuitive dashboard template, designed to streamline development and captivate users. Discover endless possibilities in design and functionality today!"

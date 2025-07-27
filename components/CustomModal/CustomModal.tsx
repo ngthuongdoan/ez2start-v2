@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, ScrollArea, Group, type ModalProps } from '@mantine/core';
 
-interface CustomModalProps extends ModalProps {
+export interface CustomModalProps extends ModalProps {
   actions: React.ReactNode;
 } 
 

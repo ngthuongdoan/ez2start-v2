@@ -2,33 +2,30 @@
 
 import { useState, useEffect, useId } from 'react';
 import {
-  Modal,
   TextInput,
   NumberInput,
   Select,
   Button,
   Stack,
-  Group,
-  Title
+  Title, 
 } from '@mantine/core';
 import { Employee } from '@/types/employee';
-import { CustomModal } from '@/components/CustomModal/CustomModal';
+import { CustomModal, CustomModalProps } from '@/components/CustomModal/CustomModal';
 import { notifications } from '@mantine/notifications';
 
-interface EmployeeModalProps {
-  opened: boolean;
-  onClose: () => void;
+type EmployeeModalProps ={
   onSuccess?: () => void;
   employee?: Employee | null; // For editing existing employee
   mode?: 'create' | 'edit';
-}
+} & Omit<CustomModalProps, "actions">
 
 export default function EmployeeModal({ 
   opened, 
   onClose, 
   onSuccess,
   employee = null,
-  mode = 'create'
+  mode = 'create',
+  ...rest
 }: EmployeeModalProps) {
   const formId = useId();
   const [form, setForm] = useState<Employee>(() => 
@@ -145,6 +142,7 @@ export default function EmployeeModal({
             </Button>
           </>
       }
+      {...rest}
     >
       <form onSubmit={handleSubmit} id={formId}>
         <Stack gap="md">

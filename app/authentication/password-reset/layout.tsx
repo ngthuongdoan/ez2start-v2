@@ -20,7 +20,7 @@ function PasswordLayout({ children }: AuthProps) {
         <Center>
           <Image
             src="/logo-no-background.png"
-            alt="DesignSparx logo"
+            alt="ez2start logo"
             width={96}
             height={96}
             style={{ objectFit: 'contain' }}

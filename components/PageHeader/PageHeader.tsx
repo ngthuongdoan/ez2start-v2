@@ -84,17 +84,13 @@ const PageHeader = (props: PageHeaderProps) => {
             gap={{ base: 'sm', sm: 4 }}
           >
             <Stack>
-              <Title order={3}>{title}</Title>
-              <Breadcrumbs {...BREADCRUMBS_PROPS}>
-                {breadcrumbItems}
-              </Breadcrumbs>
+                <Title order={3}>{title}</Title>
             </Stack>
             <Button leftSection={<IconPlus size={18} />}>New Invoice</Button>
           </Flex>
         ) : (
           <Stack gap="sm">
-            <Title order={3}>{title}</Title>
-            <Breadcrumbs {...BREADCRUMBS_PROPS}>{breadcrumbItems}</Breadcrumbs>
+                <Title order={3}>{title}</Title>
           </Stack>
         )}
       </Surface>
