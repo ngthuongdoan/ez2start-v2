@@ -1,0 +1,37 @@
+.navLink {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.navLink:hover {
+  background-color: var(--mantine-color-gray-0);
+}
+
+.activeIndicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--mantine-color-blue-6);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.active .activeIndicator {
+  transform: scaleY(1);
+}
+
+.container {
+  position: sticky;
+  top: 100px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .container {
+    position: relative;
+    top: 0;
+  }
+}

@@ -37,6 +37,7 @@ export const PATH_APPS = {
   orders: path(ROOT_APPS, '/orders'),
   profile: path(ROOT_APPS, '/profile'),
   projects: path(ROOT_APPS, '/projects'),
+  "user-settings": path(ROOT_APPS, '/user-settings'),
   settings: path(ROOT_APPS, '/settings'),
   tasks: path(ROOT_APPS, '/tasks'),
 };

@@ -4,6 +4,7 @@ import {
   ActionIcon,
   Box,
   Button,
+  Container,
   Group,
   Menu,
   Pagination,
@@ -21,6 +22,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { TableLayoutProps } from './types';
 import { generateQueryParams } from '@/utils/generateQueryParams';
+import PageHeader from '../PageHeader/PageHeader';
 
 export function TableLayout<T extends Record<string, any>>({
   collectionName,
@@ -31,7 +33,6 @@ export function TableLayout<T extends Record<string, any>>({
   sortable = true,
   pageSize = 25,
   title,
-  description,
   onRowClick,
   onAdd,
   customFilters,
@@ -175,14 +176,13 @@ export function TableLayout<T extends Record<string, any>>({
   };
 
   return (
-    <Paper p="md">
+    <Container fluid>
+      <Stack gap="lg">
+
       <Stack gap="md">
         {/* Header */}
         <Group justify="space-between">
-          <Box>
-            {title && <Title order={2}>{title}</Title>}
-            {description && <Text c="dimmed">{description}</Text>}
-          </Box>
+            <PageHeader title={title} />
           <Group>
             <ActionIcon onClick={handleRefresh} variant="light">
               <IconRefresh size={16} />
@@ -208,43 +208,47 @@ export function TableLayout<T extends Record<string, any>>({
           )}
           {customFilters}
         </Group>
+        </Stack>
+        <Paper p="md">
+          <Stack gap="md">
+            {/* Data Table */}
+            <DataTable
+              columns={tableColumns}
+              records={data}
+              fetching={loading}
+              onRowClick={onRowClick ? ({ record, event }) => {
+                // Prevent row click if an action button was clicked
+                if (
+                  event.target instanceof HTMLElement &&
+                  event.target.closest('.action-icon')
+                ) {
+                  return;
+                }
+                onRowClick(record);
+              } : undefined}
+              sortStatus={sortStatus ?? { columnAccessor: 'createdAt' as keyof T, direction: 'desc' }}
+              onSortStatusChange={handleSortStatusChange}
+              minHeight={400}
+              noRecordsText={emptyStateText}
+              highlightOnHover
+              striped
+            />
 
-        {/* Data Table */}
-        <DataTable
-          columns={tableColumns}
-          records={data}
-          fetching={loading}
-          onRowClick={onRowClick ? ({ record, event }) => {
-            // Prevent row click if an action button was clicked
-            if (
-              event.target instanceof HTMLElement &&
-              event.target.closest('.action-icon')
-            ) {
-              return;
-            }
-            onRowClick(record);
-          } : undefined}
-          sortStatus={sortStatus ?? { columnAccessor: 'createdAt' as keyof T, direction: 'desc' }}
-          onSortStatusChange={handleSortStatusChange}
-          minHeight={400}
-          noRecordsText={emptyStateText}
-          highlightOnHover
-          striped
-        />
-
-        {/* Pagination */}
-        <Group justify="space-between">
-          <Text size="sm" c="dimmed">
-            Showing {data.length} records {hasMore && '(more available)'}
-          </Text>
-          <Pagination
-            value={currentPage}
-            onChange={handlePageChange}
-            total={Math.max(totalPages, currentPage + (hasMore ? 1 : 0))}
-            size="sm"
-          />
-        </Group>
+            {/* Pagination */}
+            <Group justify="space-between">
+              <Text size="sm" c="dimmed">
+                Showing {data.length} records {hasMore && '(more available)'}
+              </Text>
+              <Pagination
+                value={currentPage}
+                onChange={handlePageChange}
+                total={Math.max(totalPages, currentPage + (hasMore ? 1 : 0))}
+                size="sm"
+              />
+            </Group>
+          </Stack>
+        </Paper>
       </Stack>
-    </Paper>
+    </Container>
   );
 }

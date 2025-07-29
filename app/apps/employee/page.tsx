@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ActionIcon, Badge, Group } from '@mantine/core';
+import { ActionIcon, Badge, Container, Group, Stack } from '@mantine/core';
 import { IconEye, IconEdit, IconTrash, IconPhone } from '@tabler/icons-react';
-import { TableLayout, TableColumn, TableAction, EmployeeModal } from '@/components';
+import { TableLayout, TableColumn, TableAction, EmployeeModal, PageHeader } from '@/components';
 import { Employee } from '@/types/employee';
 
 export default function EmployeeListPage() {
@@ -135,9 +135,8 @@ export default function EmployeeListPage() {
   return (
     <>
       <TableLayout<Employee>
+        title="Employees"
         collectionName="employees"
-        title="Employee Management"
-        description="Manage your employees, their details, and assignments"
         columns={columns}
         actions={actions}
         searchable
@@ -157,6 +156,7 @@ export default function EmployeeListPage() {
         employee={editingEmployee}
         mode={modalMode}
       />
+
     </>
   );
 }

@@ -1,43 +1,23 @@
-import { ActionIcon, Box, Flex, Group, ScrollArea, Text } from '@mantine/core';
-import {
-  IconBook2,
-  IconBrandAuth0,
-  IconBriefcase,
-  IconCalendar,
-  IconChartArcs3,
-  IconChartBar,
-  IconChartInfographic,
-  IconExclamationCircle,
-  IconFileInvoice,
-  IconLayersSubtract,
-  IconLifebuoy,
-  IconList,
-  IconListDetails,
-  IconLogin2,
-  IconMessages,
-  IconReceipt2,
-  IconRotateRectangle,
-  IconSettings,
-  IconUserCircle,
-  IconUserCode,
-  IconUserPlus,
-  IconUsers,
-  IconUserShield,
-  IconX,
-} from '@tabler/icons-react';
 import { Logo } from '@/components';
+import { LinksGroup } from '@/components/Navigation/Links/Links';
 import FirebaseUserButtonWithMenu from '@/components/UserButton/FirebaseUserButtonWithMenu';
 import {
-  PATH_ABOUT,
   PATH_APPS,
-  PATH_AUTH,
-  PATH_DASHBOARD,
-  PATH_DOCS,
-  PATH_PAGES,
+  PATH_DASHBOARD
 } from '@/routes';
+import { ActionIcon, Box, Flex, Group, ScrollArea, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
+import {
+  IconCalendar,
+  IconChartBar,
+  IconFileInvoice,
+  IconSettings,
+  IconUserCircle,
+  IconUserCog,
+  IconUsers,
+  IconX
+} from '@tabler/icons-react';
 import classes from './Navigation.module.css';
-import { LinksGroup } from '@/components/Navigation/Links/Links';
 
 const mockdata = [
   {
@@ -57,10 +37,11 @@ const mockdata = [
     links: [
       { label: 'Profile', icon: IconUserCircle, link: PATH_APPS.profile },
       { label: 'Employee', icon: IconUsers, link: PATH_APPS.employee },
+      { label: 'User settings', icon: IconUserCog, link: PATH_APPS['user-settings'] },
       { label: 'Settings', icon: IconSettings, link: PATH_APPS.settings },
-      { label: 'Chat', icon: IconMessages, link: PATH_APPS.chat },
-      { label: 'Projects', icon: IconBriefcase, link: PATH_APPS.projects },
-      { label: 'Orders', icon: IconListDetails, link: PATH_APPS.orders },
+      // { label: 'Chat', icon: IconMessages, link: PATH_APPS.chat },
+      // { label: 'Projects', icon: IconBriefcase, link: PATH_APPS.projects },
+      // { label: 'Orders', icon: IconListDetails, link: PATH_APPS.orders },
       {
         label: 'Invoices',
         icon: IconFileInvoice,

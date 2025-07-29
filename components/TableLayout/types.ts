@@ -35,8 +35,7 @@ export interface TableLayoutProps<T = any> {
   pageSize?: number;
 
   // Styling
-  title?: string;
-  description?: string;
+  title: string;
 
   // Callbacks
   onRowClick?: (record: T) => void;

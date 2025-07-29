@@ -70,7 +70,7 @@ class CloudinaryService {
       formData.append('upload_preset', this.uploadPreset);
 
       if (options.folder) {
-        formData.append('folder', options.folder);
+        formData.append('folder', "ez2start/" + options.folder);
       }
 
       if (options.publicId) {

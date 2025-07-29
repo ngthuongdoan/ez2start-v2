@@ -1,25 +1,22 @@
 import { PageHeader } from '@/components';
+import { SettingContainer } from '@/containers/apps/settings/Settings.container';
 import {
   Container,
-  Stack
 } from '@mantine/core';
 
-import { UserSettingDetailForm } from '@/components/UserSettingDetailForm';
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'User Setting | ez2start',
+  title: 'Setting | ez2start',
 }
 
-function UserSetting() {
+function SettingPage() {
   return (
     <Container fluid>
-      <Stack gap="lg">
-        <PageHeader title="User Setting" />
-        <UserSettingDetailForm p="md" shadow="md" radius="md" h="100%" />
-      </Stack>
+      <PageHeader title="Setting" />
+      <SettingContainer />
     </Container>
   );
-}
+};
 
-export default UserSetting;
+export default SettingPage;
