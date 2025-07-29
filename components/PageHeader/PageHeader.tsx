@@ -32,26 +32,6 @@ const PageHeader = (props: PageHeaderProps) => {
   const theme = useMantineTheme();
   const colorScheme = useColorScheme();
 
-  const BREADCRUMBS_PROPS: Omit<BreadcrumbsProps, 'children'> = {
-    style: {
-      a: {
-        padding: rem(8),
-        borderRadius: theme.radius.sm,
-        fontWeight: 500,
-        color: colorScheme === 'dark' ? theme.white : theme.black,
-
-        '&:hover': {
-          transition: 'all ease 150ms',
-          backgroundColor:
-            colorScheme === 'dark'
-              ? theme.colors.dark[5]
-              : theme.colors.gray[2],
-          textDecoration: 'none',
-        },
-      },
-    },
-  };
-
   return (
     <>
       <Surface
@@ -89,7 +69,7 @@ const PageHeader = (props: PageHeaderProps) => {
             <Button leftSection={<IconPlus size={18} />}>New Invoice</Button>
           </Flex>
         ) : (
-          <Stack gap="sm">
+              <Stack gap="sm" pb="md">
                 <Title order={3}>{title}</Title>
           </Stack>
         )}

@@ -51,8 +51,7 @@ export function SettingsNav({ active = 'general', onNavChange }: SettingsNavProp
 
   return (
     <Box className={styles.container}>
-      <Text fw={700} mb="md">Settings</Text>
-      <Stack gap="xs">
+      <Stack gap="0">
         {navItems.map((item) => {
           const isActive = active === item.value;
           return (

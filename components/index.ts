@@ -18,7 +18,6 @@ import ChatItem from '@/components/ChatItem/ChatItem';
 import ProjectsCard from '@/components/ProjectsCard/ProjectsCard';
 import AddTaskCard from '@/components/AddTaskCard/AddTaskCard';
 import KanbanColumn from '@/components/KanbanColumn/KanbanColumn';
-import SettingsNav from '@/components/SettingsNav/SettingsNav';
 import KanbanCard from '@/components/KanbanCard/KanbanCard';
 import KanbanBoard from '@/components/KanbanBoard/KanbanBoard';
 import OrdersTable from '@/components/OrdersTable/OrdersTable';
@@ -79,5 +78,4 @@ export {
   UserButton,
   ErrorAlert,
   EmployeeModal,
-  SettingsNav,
 };

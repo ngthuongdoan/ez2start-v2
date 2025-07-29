@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 function SettingPage() {
   return (
     <Container fluid>
-      <PageHeader title="Setting" />
+      <PageHeader title="Settings" />
       <SettingContainer />
     </Container>
   );
