@@ -10,8 +10,6 @@ type SettingContainerProps = {
 }
 
 // All available sections in order
-const sections = ['general', 'shift', 'role', 'position', 'help'];
-
 const SettingContainer = (props: SettingContainerProps) => {
   const [activeSection, setActiveSection] = useState<string>("general");
 
@@ -69,34 +67,6 @@ const SettingContainer = (props: SettingContainerProps) => {
       // Update URL hash without causing a page reload
       window.history.replaceState(null, '', `#${activeSection}`);
     }
-  }, [activeSection]);
-
-  // Add keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        const currentIndex = sections.indexOf(activeSection);
-        if (currentIndex < sections.length - 1) {
-          const nextSection = sections[currentIndex + 1];
-          handleNavChange(nextSection);
-        }
-      }
-
-      if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        const currentIndex = sections.indexOf(activeSection);
-        if (currentIndex > 0) {
-          const prevSection = sections[currentIndex - 1];
-          handleNavChange(prevSection);
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
   }, [activeSection]);
 
   return (
