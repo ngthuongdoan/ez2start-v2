@@ -1,12 +1,18 @@
-import { v2 as cloudinary } from 'cloudinary';
 import axios from 'axios';
 
-// Configure cloudinary
-cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+// We'll only import cloudinary on the server side
+let cloudinary: any;
+if (typeof window === 'undefined') {
+  const { v2 } = require('cloudinary');
+  cloudinary = v2;
+
+  // Configure cloudinary (server-side only)
+  cloudinary.config({
+    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+}
 
 interface CloudinaryUploadResponse {
   public_id: string;
@@ -109,6 +115,10 @@ class CloudinaryService {
    * Delete image from Cloudinary (server-side only)
    */
   async deleteImage(publicId: string): Promise<CloudinaryDeleteResponse> {
+    if (typeof window !== 'undefined') {
+      throw new Error('deleteImage can only be called from server-side code');
+    }
+
     try {
       const result = await cloudinary.uploader.destroy(publicId);
       return result;
@@ -125,6 +135,20 @@ class CloudinaryService {
     publicId: string,
     transformations: CloudinaryTransformOptions = {}
   ): string {
+    if (typeof window !== 'undefined') {
+      // Client-side: construct URL manually
+      const transformationStr = Object.entries({
+        ...transformations,
+        f: 'auto',
+        q: 'auto',
+      })
+        .map(([key, value]) => `${key}_${value}`)
+        .join(',');
+
+      return `https://res.cloudinary.com/${this.cloudName}/image/upload/${transformationStr}/${publicId}`;
+    }
+
+    // Server-side: use cloudinary SDK
     return cloudinary.url(publicId, {
       ...transformations,
       fetch_format: 'auto',

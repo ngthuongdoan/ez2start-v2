@@ -1,9 +1,9 @@
 'use client';
 import { SettingsNav } from "@/components/SettingsNav";
-import { Grid, ScrollArea } from "@mantine/core";
+import { Grid, ScrollArea, Stack } from "@mantine/core";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import styles from "./Settings.module.css";
+import { GeneralSettings, HelpSettings, PositionSettings, RoleSettings, ShiftSettings } from "./components";
 
 type SettingContainerProps = {
 
@@ -71,29 +71,25 @@ const SettingContainer = (props: SettingContainerProps) => {
 
   return (
     <Grid gutter={0}>
-      <Grid.Col span={{ base: 12, sm: 4 }}>
+      <Grid.Col span={{ base: 12, sm: 2 }}>
         <SettingsNav
           active={activeSection}
           onNavChange={handleNavChange}
         />
       </Grid.Col>
-      <Grid.Col span={{ base: 12, sm: 8 }}>
+      <Grid.Col span={{ base: 12, sm: 10 }}>
         <ScrollArea
           h="calc(100vh - 120px)"
           type="hover"
           scrollbarSize={6}
           scrollHideDelay={500}
           viewportRef={viewportRef}>
-          <div className={styles.contentWrapper}>
-            <div
-              id="general"
-              data-section-id="general"
-              className={`${styles['settings-section']} ${activeSection === 'general' ? styles.active : ''}`}
-            >
-              <h2>General Settings</h2>
-              <p>Configure general application settings here.</p>
-              {/* General Settings Content */}
-            </div>
+          <Stack pr="md" py="md">
+            <GeneralSettings />
+            <ShiftSettings />
+            <RoleSettings />
+            <PositionSettings />
+            <HelpSettings />
             <div
               id="shift"
               data-section-id="shift"
@@ -130,7 +126,7 @@ const SettingContainer = (props: SettingContainerProps) => {
               <p>Find answers to common questions and learn how to use the system.</p>
               {/* Help Content */}
             </div>
-          </div>
+          </Stack>
         </ScrollArea>
       </Grid.Col>
     </Grid>
