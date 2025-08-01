@@ -1,6 +1,6 @@
 'use client';
 import { ImageUploader } from "@/components/ImageUploader/ImageUploader";
-import { Button, ColorInput, ComboboxData, Grid, Group, noop, Paper, Select, Stack, TextInput, Title, useMantineColorScheme, useMantineTheme } from "@mantine/core";
+import { Button, ColorInput, ComboboxData, getThemeColor, Grid, Group, noop, Paper, parseThemeColor, Select, Stack, TextInput, Title, useMantineColorScheme, useMantineTheme } from "@mantine/core";
 import { useForm } from "@mantine/form";
 const COMPANY_SIZE_OPTIONS: ComboboxData = [
   {
@@ -38,21 +38,35 @@ const THEME_OPTIONS: ComboboxData = [
     value: "dark",
   }
 ];
+
+const TIME_DISPLAY_OPTIONS: ComboboxData = [
+  {
+    label: "12-hour format",
+    value: "12h",
+  },
+  {
+    label: "24-hour format",
+    value: "24h",
+  }
+];
 type GeneralSettingsProps = {
 }
 
 const GeneralSettings = (props: GeneralSettingsProps) => {
   const { colorScheme } = useMantineColorScheme();
   const theme = useMantineTheme();
+  const parsedColor = parseThemeColor({ color: theme.primaryColor, theme });
+
   const form = useForm({
     initialValues: {
       theme: colorScheme, // false: Light, true: Dark
       businessName: "",
       language: "",
-      themeColor: theme.primaryColor,
+      themeColor: parsedColor.value,
       logo: null as File | null,
       companySize: "",
       licenseKey: "1234-5678-ABCD-EFGH",
+      timeDisplay: "24h",
     },
   });
 
@@ -114,11 +128,18 @@ const GeneralSettings = (props: GeneralSettingsProps) => {
                       {...form.getInputProps("theme")}
                     />
                   </Grid.Col>
-                  <Grid.Col span={12}>
+                  <Grid.Col span={6}>
                     <TextInput
                       label="License Key"
-                      value={form.values.licenseKey}
+                      {...form.getInputProps("licenseKey")}
                       disabled
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <Select
+                      label="Time display"
+                      data={TIME_DISPLAY_OPTIONS}
+                      {...form.getInputProps("timeDisplay")}
                     />
                   </Grid.Col>
                 </Grid>

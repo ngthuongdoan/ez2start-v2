@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Group,
+  noop,
   Paper,
   Stack,
   Text,
@@ -14,6 +15,7 @@ import { SurfaceProps } from '../Surface/Surface';
 import { useEffect } from 'react';
 import { useUserSettingMutation, useUserSettingQuery } from './UserSettingDetailForm.hook';
 import { useForm } from '@mantine/form';
+import { ImageUploader } from '../ImageUploader/ImageUploader';
 
 type UserSettingDetailFormProps = {
 
@@ -32,6 +34,7 @@ const UserSettingDetailForm = ({ ...rest }: UserSettingDetailFormProps) => {
       city: '',
       state: '',
       zip: '',
+      avatar: ''
     },
   });
   useEffect(() => {
@@ -74,6 +77,8 @@ const UserSettingDetailForm = ({ ...rest }: UserSettingDetailFormProps) => {
               disabled={isSaving}
             />
           </Group>
+          <Group grow>
+
           <TextInput
             label="Email"
             placeholder="email"
@@ -86,6 +91,7 @@ const UserSettingDetailForm = ({ ...rest }: UserSettingDetailFormProps) => {
             {...accountInfoForm.getInputProps('address')}
             disabled={isSaving}
           />
+          </Group>
           <TextInput
             label="Apartment/Studio/Floor"
             placeholder="apartment, studio, or floor"
@@ -112,6 +118,18 @@ const UserSettingDetailForm = ({ ...rest }: UserSettingDetailFormProps) => {
               disabled={isSaving}
             />
           </Group>
+          <ImageUploader
+            imageUrl={accountInfoForm.values.avatar}
+            folder="avatars"
+            width={100}
+            height={100}
+            radius="sm"
+            title="Upload avatar"
+            description="Recommended size: 100x100px, PNG format"
+            onUploadSuccess={(url) => {
+              accountInfoForm.setFieldValue('avatar', url);
+            }}
+          />
           <Box style={{ width: 'auto' }}>
             <Button
               leftSection={<IconDeviceFloppy size={16} />}
