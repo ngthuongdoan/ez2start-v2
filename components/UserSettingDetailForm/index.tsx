@@ -15,7 +15,8 @@ import { SurfaceProps } from '../Surface/Surface';
 import { useEffect } from 'react';
 import { useUserSettingMutation, useUserSettingQuery } from './UserSettingDetailForm.hook';
 import { useForm } from '@mantine/form';
-import { ImageUploader } from '../ImageUploader/ImageUploader';
+import { ImageUploader } from '../ImageUploader';
+import { UploadPreset } from '@/lib/cloudinary';
 
 type UserSettingDetailFormProps = {
 
@@ -119,16 +120,13 @@ const UserSettingDetailForm = ({ ...rest }: UserSettingDetailFormProps) => {
             />
           </Group>
           <ImageUploader
-            imageUrl={accountInfoForm.values.avatar}
-            folder="avatars"
-            width={100}
-            height={100}
-            radius="sm"
-            title="Upload avatar"
-            description="Recommended size: 100x100px, PNG format"
-            onUploadSuccess={(url) => {
-              accountInfoForm.setFieldValue('avatar', url);
+            preset={UploadPreset.Avatar}
+            aspectRatio="1:1"
+            className="w-48 h-48"
+            onUploadComplete={(result) => {
+              accountInfoForm.setFieldValue('avatar', result.url);
             }}
+            imageUrl={accountInfoForm.values.avatar}
           />
           <Box style={{ width: 'auto' }}>
             <Button

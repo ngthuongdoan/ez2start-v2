@@ -1,13 +1,23 @@
-import axios from 'axios';
+import cloudinary from 'cloudinary';
+import { UploadPreset } from './cloudinary';
 
-// We'll only import cloudinary on the server side
-let cloudinary: any;
+// Only import stream types on server-side
+type ReadableStream = import('stream').Readable;
+
+// Only import stream functionality on server-side
 if (typeof window === 'undefined') {
-  const { v2 } = require('cloudinary');
-  cloudinary = v2;
+  import('stream').then(() => {
+    // Stream module loaded
+  });
+}
 
+
+let cloudinaryV2: typeof cloudinary.v2;
+
+if (typeof window === 'undefined') {
   // Configure cloudinary (server-side only)
-  cloudinary.config({
+  cloudinaryV2 = cloudinary.v2;
+  cloudinaryV2.config({
     cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
@@ -50,12 +60,10 @@ interface CloudinaryTransformOptions {
 class CloudinaryService {
   private uploadPreset: string;
   private cloudName: string;
-  private baseUploadUrl: string;
 
   constructor() {
     this.uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || '';
     this.cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || '';
-    this.baseUploadUrl = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
   }
 
   /**
@@ -94,15 +102,13 @@ class CloudinaryService {
         formData.append('transformation', transformString);
       }
 
-      const response = await axios.post<CloudinaryUploadResponse>(
-        this.baseUploadUrl,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
+      const response = await cloudinaryV2.uploader.upload(file.toString(), {
+        upload_preset: this.uploadPreset,
+        folder: options.folder,
+        public_id: options.publicId,
+        tags: options.tags,
+        transformation: options.transformation,
+      });
 
       return response.data;
     } catch (error) {
@@ -120,7 +126,7 @@ class CloudinaryService {
     }
 
     try {
-      const result = await cloudinary.uploader.destroy(publicId);
+      const result = await cloudinaryV2.uploader.destroy(publicId);
       return result;
     } catch (error) {
       console.error('Cloudinary delete error:', error);
@@ -149,7 +155,7 @@ class CloudinaryService {
     }
 
     // Server-side: use cloudinary SDK
-    return cloudinary.url(publicId, {
+    return cloudinaryV2.url(publicId, {
       ...transformations,
       fetch_format: 'auto',
       quality: 'auto',
@@ -161,7 +167,7 @@ class CloudinaryService {
    */
   async getImageInfo(publicId: string): Promise<any> {
     try {
-      const result = await cloudinary.api.resource(publicId);
+      const result = await cloudinaryV2.api.resource(publicId);
       return result;
     } catch (error) {
       console.error('Cloudinary get image info error:', error);
@@ -186,7 +192,7 @@ class CloudinaryService {
         options.prefix = folder;
       }
 
-      const result = await cloudinary.api.resources(options);
+      const result = await cloudinaryV2.api.resources(options);
       return result;
     } catch (error) {
       console.error('Cloudinary list images error:', error);
@@ -207,14 +213,14 @@ class CloudinaryService {
 
       switch (command) {
         case 'add':
-          result = await cloudinary.uploader.add_tag(tags.join(','), [publicId]);
+          result = await cloudinaryV2.uploader.add_tag(tags.join(','), [publicId]);
           break;
         case 'remove':
-          result = await cloudinary.uploader.remove_tag(tags.join(','), [publicId]);
+          result = await cloudinaryV2.uploader.remove_tag(tags.join(','), [publicId]);
           break;
         case 'replace':
         default:
-          result = await cloudinary.uploader.replace_tag(tags.join(','), [publicId]);
+          result = await cloudinaryV2.uploader.replace_tag(tags.join(','), [publicId]);
           break;
       }
 
@@ -245,7 +251,7 @@ class CloudinaryService {
         ...options.transformation,
       };
 
-      const result = await cloudinary.uploader.upload(url, uploadOptions);
+      const result = await cloudinaryV2.uploader.upload(url, uploadOptions);
       return result;
     } catch (error) {
       console.error('Cloudinary upload from URL error:', error);
@@ -260,13 +266,125 @@ class CloudinaryService {
     const timestamp = Math.round(new Date().getTime() / 1000);
     const paramsWithTimestamp = { ...params, timestamp };
 
-    const signature = cloudinary.utils.api_sign_request(
+    const signature = cloudinaryV2.utils.api_sign_request(
       paramsWithTimestamp,
       process.env.CLOUDINARY_API_SECRET!
     );
 
     return { signature, timestamp };
   }
+}
+
+/**
+ * Upload a logo image (server-side only)
+ */
+export const uploadLogo = (name: string, stream: ReadableStream): Promise<string> => {
+  if (typeof window !== 'undefined') {
+    throw new Error('uploadLogo can only be called from server-side code');
+  }
+
+  return new Promise((resolve, reject) => {
+    const outStream = cloudinaryV2.uploader.upload_stream(
+      {
+        public_id: name,
+        folder: 'logos',
+      },
+      (err, callResult) => {
+        if (err) {
+          return reject(err);
+        }
+
+        const successResult = callResult as cloudinary.UploadApiResponse;
+
+        return resolve(
+          `https://res.cloudinary.com/daily-now/image/upload/t_logo,f_auto/v1/${successResult.public_id}`,
+        );
+      },
+    );
+    stream.pipe(outStream);
+  });
+};
+
+interface OptionalProps {
+  invalidate?: boolean;
+}
+
+interface UploadResult {
+  url: string;
+  id: string;
+}
+
+type UploadFn = (
+  name: string,
+  stream: ReadableStream,
+  options?: OptionalProps,
+) => Promise<UploadResult>;
+
+/**
+ * Upload a file using stream (server-side only)
+ */
+export const uploadFile = (
+  name: string,
+  preset: UploadPreset,
+  stream: ReadableStream,
+): Promise<UploadResult> => {
+  if (typeof window !== 'undefined') {
+    throw new Error('uploadFile can only be called from server-side code');
+  }
+
+  return new Promise((resolve, reject) => {
+    const outStream = cloudinaryV2.uploader.upload_stream(
+      {
+        public_id: name,
+        upload_preset: preset,
+      },
+      (err, callResult) => {
+        if (err) {
+          return reject(err);
+        }
+
+        const successResult = callResult as cloudinary.UploadApiResponse;
+
+        return resolve({
+          url: mapCloudinaryUrl(
+            cloudinaryV2.url(successResult.public_id, {
+              version: successResult.version,
+              secure: true,
+              fetch_format: 'auto',
+              sign_url: true,
+            }),
+          ),
+          id: successResult.public_id,
+        });
+      },
+    );
+    stream.pipe(outStream);
+  });
+};
+
+export const uploadAvatar: UploadFn = (userId, stream) =>
+  uploadFile(`${UploadPreset.Avatar}_${userId}`, UploadPreset.Avatar, stream);
+
+interface ClearFileProps {
+  referenceId: string;
+  preset: UploadPreset;
+}
+
+export const clearFile = ({ referenceId, preset }: ClearFileProps) => {
+  if (!process.env.CLOUDINARY_URL) {
+    return;
+  }
+
+  const id = `${preset}_${referenceId}`;
+
+  return cloudinaryV2.uploader.destroy(id);
+};
+
+export function mapCloudinaryUrl(url: string): string;
+export function mapCloudinaryUrl(url: undefined): undefined;
+export function mapCloudinaryUrl(url?: string | null): string | undefined;
+export function mapCloudinaryUrl(url?: string | null): string | undefined {
+  return url || ''
 }
 
 export const cloudinaryService = new CloudinaryService();

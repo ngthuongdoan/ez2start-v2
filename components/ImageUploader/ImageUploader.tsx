@@ -3,6 +3,8 @@ import { cloudinaryService } from "@/lib/cloudinaryService";
 import { Button, FileButton, Image, Stack, StackProps, Text } from "@mantine/core";
 import { useState } from "react";
 import { IconCloudUpload } from "@tabler/icons-react";
+import { UploadPreset } from "@/lib/cloudinary";
+import { uploadFileClient } from "@/lib/cloudinaryClient";
 
 type ImageUploaderProps = {
   imageUrl?: string;
@@ -16,14 +18,28 @@ type ImageUploaderProps = {
   title?: string;
   description?: string;
   disabled?: boolean;
+  preset: UploadPreset;
+  onUploadComplete?: (result: { url: string; id: string }) => void;
+  maxSizeMB?: number;
+  acceptedFileTypes?: string;
+  imageId?: string;
+  className?: string;
+  aspectRatio?: string; // e.g., '1:1', '16:9', '4:3'
 } & StackProps
 
 const ImageUploader = ({
+  preset,
+  onUploadComplete,
+  maxSizeMB = 5,
+  acceptedFileTypes = 'image/*',
+  imageId,
+  className = '',
+  aspectRatio = '1:1',
   imageUrl,
   defaultImageUrl = 'https://placehold.co/128x128',
   onUploadSuccess,
   onUploadError,
-  folder = 'images',
+  folder = 'ez2start/avatars',
   width = 128,
   height = 128,
   radius = '0',
@@ -37,10 +53,14 @@ const ImageUploader = ({
   const handleUpload = async (file: File) => {
     setIsLoading(true);
     try {
-      const result = await cloudinaryService.uploadImage(file, {
-        folder
-      });
-      const url = result.secure_url;
+      const uniqueId = imageId || `${preset}_${Date.now()}`;
+
+      const result = await uploadFileClient(file, uniqueId, preset, folder);
+      console.log("🚀 ----------------------------------🚀")
+      console.log("🚀 ~ handleUpload ~ result:", result)
+      console.log("🚀 ----------------------------------🚀")
+
+      const url = result.url;
       onUploadSuccess?.(url);
     } catch (error) {
       onUploadError?.(error instanceof Error ? error : new Error('Upload failed'));
