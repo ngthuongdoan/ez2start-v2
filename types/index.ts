@@ -50,3 +50,6 @@ export type Invoices = {
   client_name: string;
   client_company: string;
 };
+
+// Re-export inventory types
+export * from './inventory';

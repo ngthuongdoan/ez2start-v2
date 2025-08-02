@@ -35,7 +35,6 @@ export function LinksGroup(props: LinksGroupProps) {
 
   const items = (hasLinks ? links : []).map((link) => (
     <Text
-      component="button"
       className={classes.link}
       onClick={() => {
         router.push(link.link);

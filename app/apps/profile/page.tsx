@@ -93,8 +93,8 @@ function Profile() {
         />
       </>
       <Container fluid>
+        <PageHeader title="Profile" />
         <Stack gap="lg">
-          <PageHeader title="Profile" breadcrumbItems={items} />
           <Grid>
             <Grid.Col span={{ base: 12, md: 5, lg: 4 }}>
               <Stack>

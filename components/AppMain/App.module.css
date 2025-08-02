@@ -1,5 +1,5 @@
 .main {
-  min-height: 91vh;
+  min-height: 90vh;
   height: 100%;
   @mixin light {
     background-color: var(--mantine-color-gray-1);
@@ -7,5 +7,9 @@
 
   @mixin dark {
     background-color: var(--mantine-color-dark-9);
+  }
+  
+  @media screen and (min-width: 1920px) and (max-width: 2560px) {
+    min-height: 94vh;
   }
 }

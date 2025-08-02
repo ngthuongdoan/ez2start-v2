@@ -76,7 +76,7 @@ export function TableLayout<T extends Record<string, any>>({
                 onClick={(e) => {
                   e.stopPropagation();
                   action.onClick(record);
-                } }
+                }}
               >
                 {action.icon}
               </ActionIcon>
@@ -111,7 +111,7 @@ export function TableLayout<T extends Record<string, any>>({
   }, [columns, actions, sortable]);
 
   // Get search fields from columns
-  const searchFields = useMemo(() => 
+  const searchFields = useMemo(() =>
     columns.filter(col => col.filterable !== false).map(col => col.accessor || col.key),
     [columns]
   );
@@ -178,37 +178,38 @@ export function TableLayout<T extends Record<string, any>>({
   return (
     <Container fluid>
       <Stack gap="lg">
+        <div>
+          <PageHeader
+            title={title}
+            rightSection={
+              <Group>
+                <ActionIcon onClick={handleRefresh} variant="light">
+                  <IconRefresh size={16} />
+                </ActionIcon>
+                {onAdd && (
+                  <Button leftSection={<IconPlus size={16} />} onClick={onAdd}>
+                    Add New
+                  </Button>
+                )}
+              </Group>
+            }
+          />
 
-      <Stack gap="md">
-        {/* Header */}
-        <Group justify="space-between">
-            <PageHeader title={title} />
+          {/* Filters and Search */}
           <Group>
-            <ActionIcon onClick={handleRefresh} variant="light">
-              <IconRefresh size={16} />
-            </ActionIcon>
-            {onAdd && (
-              <Button leftSection={<IconPlus size={16} />} onClick={onAdd}>
-                Add New
-              </Button>
+            {searchable && (
+              <TextInput
+                placeholder="Search..."
+                leftSection={<IconSearch size={16} />}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.currentTarget.value)}
+                style={{ flex: 1 }}
+              />
             )}
+            {customFilters}
           </Group>
-        </Group>
+        </div>
 
-        {/* Filters and Search */}
-        <Group>
-          {searchable && (
-            <TextInput
-              placeholder="Search..."
-              leftSection={<IconSearch size={16} />}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.currentTarget.value)}
-              style={{ flex: 1 }}
-            />
-          )}
-          {customFilters}
-        </Group>
-        </Stack>
         <Paper p="md">
           <Stack gap="md">
             {/* Data Table */}

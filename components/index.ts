@@ -34,6 +34,10 @@ import TextEditor from '@/components/TextEditor';
 import UserButton from '@/components/UserButton';
 import ErrorAlert from '@/components/ErrorAlert';
 import EmployeeModal from './EmployeeModal/EmployeeModal';
+import ProductModal from './ProductModal/ProductModal';
+import CategoryModal from './CategoryModal/CategoryModal';
+import SupplierModal from './SupplierModal/SupplierModal';
+import StockAdjustmentModal from './StockAdjustmentModal/StockAdjustmentModal';
 export { UserInfo } from './UserInfo';
 export { LogoutButton } from './LogoutButton';
 export { default as FirebaseUserButton } from './UserButton/FirebaseUserButton';
@@ -78,4 +82,8 @@ export {
   UserButton,
   ErrorAlert,
   EmployeeModal,
+  ProductModal,
+  CategoryModal,
+  SupplierModal,
+  StockAdjustmentModal,
 };

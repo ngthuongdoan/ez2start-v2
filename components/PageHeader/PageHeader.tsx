@@ -24,10 +24,11 @@ type PageHeaderProps = {
   withActions?: boolean;
   breadcrumbItems?: any;
   invoiceAction?: boolean;
+  rightSection?: React.ReactNode;
 } & PaperProps;
 
 const PageHeader = (props: PageHeaderProps) => {
-  const { withActions, breadcrumbItems, title, invoiceAction, ...others } =
+  const { withActions, breadcrumbItems, title, invoiceAction, rightSection, ...others } =
     props;
 
   return (
@@ -67,12 +68,22 @@ const PageHeader = (props: PageHeaderProps) => {
             <Button leftSection={<IconPlus size={18} />}>New Invoice</Button>
           </Flex>
         ) : (
-              <Stack gap="sm">
-                <Title order={3}>{title}</Title>
-          </Stack>
+              <Flex
+                align="center"
+                justify="space-between"
+                direction={{ base: 'row', sm: 'row' }}
+                gap={{ base: 'sm', sm: 4 }}
+                pb="md"
+              >
+
+                <Stack gap="sm">
+                  <Title order={3}>{title}</Title>
+                </Stack>
+                {rightSection}
+              </Flex>
         )}
       </Surface>
-      <Divider />
+      <Divider pb="md" />
     </>
   );
 };

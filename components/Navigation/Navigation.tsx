@@ -8,10 +8,16 @@ import {
 import { ActionIcon, Box, Flex, Group, ScrollArea, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import {
+  IconBoxSeam,
   IconCalendar,
+  IconCategory,
   IconChartBar,
+  IconChartLine,
   IconFileInvoice,
+  IconPackage,
   IconSettings,
+  IconStack2,
+  IconTruck,
   IconUserCircle,
   IconUserCog,
   IconUsers,
@@ -37,6 +43,18 @@ const mockdata = [
     links: [
       { label: 'Profile', icon: IconUserCircle, link: PATH_APPS.profile },
       { label: 'Employee', icon: IconUsers, link: PATH_APPS.employee },
+      {
+        label: 'Inventory',
+        icon: IconPackage,
+        link: PATH_APPS.inventory.root,
+        links: [
+          { label: 'Products', icon: IconBoxSeam, link: PATH_APPS.inventory.products },
+          { label: 'Categories', icon: IconCategory, link: PATH_APPS.inventory.categories },
+          { label: 'Suppliers', icon: IconTruck, link: PATH_APPS.inventory.suppliers },
+          { label: 'Stock Management', icon: IconStack2, link: PATH_APPS.inventory.stock },
+          { label: 'Reports', icon: IconChartLine, link: PATH_APPS.inventory.reports },
+        ]
+      },
       { label: 'User settings', icon: IconUserCog, link: PATH_APPS['user-settings'] },
       { label: 'Settings', icon: IconSettings, link: PATH_APPS.settings },
       // { label: 'Chat', icon: IconMessages, link: PATH_APPS.chat },

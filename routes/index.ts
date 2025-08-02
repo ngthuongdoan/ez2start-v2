@@ -28,6 +28,14 @@ export const PATH_APPS = {
   calendar: path(ROOT_APPS, '/calendar'),
   chat: path(ROOT_APPS, '/chat'),
   employee: path(ROOT_APPS, '/employee'),
+  inventory: {
+    root: path(ROOT_APPS, '/inventory'),
+    products: path(ROOT_APPS, '/inventory/products'),
+    categories: path(ROOT_APPS, '/inventory/categories'),
+    suppliers: path(ROOT_APPS, '/inventory/suppliers'),
+    stock: path(ROOT_APPS, '/inventory/stock'),
+    reports: path(ROOT_APPS, '/inventory/reports'),
+  },
   invoices: {
     all: path(ROOT_APPS, ROOTS_INVOICES + '/list'),
     sample: path(ROOT_APPS, ROOTS_INVOICES + `/details/`),
