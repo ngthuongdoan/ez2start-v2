@@ -4,6 +4,9 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { setTokenCookie } from "@/lib/cookies-server";
 import { createOrUpdateUser } from "@/lib/userManager";
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   const { email, password } = await req.json();
   try {

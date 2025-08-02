@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerAuthStatus } from "@/lib/auth-server";
 import { updateUserPreferences } from "@/lib/userManager";
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
 export async function PUT(req: NextRequest) {
   try {
     const authStatus = await getServerAuthStatus();

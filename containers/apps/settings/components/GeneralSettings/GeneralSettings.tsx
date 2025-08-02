@@ -1,5 +1,6 @@
 'use client';
 import { ImageUploader } from "@/components/ImageUploader/ImageUploader";
+import { UploadPreset } from "@/lib/cloudinary";
 import { Button, ColorInput, ComboboxData, getThemeColor, Grid, Group, noop, Paper, parseThemeColor, Select, Stack, TextInput, Title, useMantineColorScheme, useMantineTheme } from "@mantine/core";
 import { useForm } from "@mantine/form";
 const COMPANY_SIZE_OPTIONS: ComboboxData = [
@@ -147,6 +148,7 @@ const GeneralSettings = (props: GeneralSettingsProps) => {
 
               <Grid.Col span={4}>
                 <ImageUploader
+                  preset={UploadPreset.Logo}
                   imageUrl={form.values.logo ? URL.createObjectURL(form.values.logo) : undefined}
                   folder="logos"
                   width={200}

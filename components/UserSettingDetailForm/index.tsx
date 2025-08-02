@@ -3,6 +3,7 @@ import { Surface } from '@/components';
 import {
   Box,
   Button,
+  Grid,
   Group,
   noop,
   Paper,
@@ -44,7 +45,7 @@ const UserSettingDetailForm = ({ ...rest }: UserSettingDetailFormProps) => {
 
   useEffect(() => {
     if (user) {
-      accountInfoForm.setInitialValues(user);
+      accountInfoForm.setValues(user);
     }
   }, [user]);
 
@@ -58,76 +59,87 @@ const UserSettingDetailForm = ({ ...rest }: UserSettingDetailFormProps) => {
           <Text size="lg" fw={600}>
             Account information
           </Text>
-          <Group grow>
-            <TextInput
-              label="User Name"
-              placeholder="user name"
-              {...accountInfoForm.getInputProps('username')}
-              disabled={isSaving}
-            />
-            <TextInput
-              label="First name"
-              placeholder="first name"
-              {...accountInfoForm.getInputProps('firstName')}
-              disabled={isSaving}
-            />
-            <TextInput
-              label="Last name"
-              placeholder="last name"
-              {...accountInfoForm.getInputProps('lastName')}
-              disabled={isSaving}
-            />
-          </Group>
-          <Group grow>
+          <Grid>
+            <Grid.Col span={10}>
+              <Stack>
 
-          <TextInput
-            label="Email"
-            placeholder="email"
-            {...accountInfoForm.getInputProps('email')}
-            disabled={isSaving}
-          />
-          <TextInput
-            label="Address"
-            placeholder="address"
-            {...accountInfoForm.getInputProps('address')}
-            disabled={isSaving}
-          />
-          </Group>
-          <TextInput
-            label="Apartment/Studio/Floor"
-            placeholder="apartment, studio, or floor"
-            {...accountInfoForm.getInputProps('apartment')}
-            disabled={isSaving}
-          />
-          <Group grow>
-            <TextInput
-              label="City"
-              placeholder="city"
-              {...accountInfoForm.getInputProps('city')}
-              disabled={isSaving}
-            />
-            <TextInput
-              label="State"
-              placeholder="state"
-              {...accountInfoForm.getInputProps('state')}
-              disabled={isSaving}
-            />
-            <TextInput
-              label="Zip"
-              placeholder="zip"
-              {...accountInfoForm.getInputProps('zip')}
-              disabled={isSaving}
-            />
-          </Group>
-          <ImageUploader
-            preset={UploadPreset.Avatar}
-            aspectRatio="1:1"
-            className="w-48 h-48"
-            onUploadComplete={(result) => {
-              accountInfoForm.setFieldValue('avatar', result.url);
-            }}
-            imageUrl={accountInfoForm.values.avatar}
-          />
+                <Group grow>
+                  <TextInput
+                    label="User Name"
+                    placeholder="user name"
+                    {...accountInfoForm.getInputProps('username')}
+                    disabled={isSaving}
+                  />
+                  <TextInput
+                    label="First name"
+                    placeholder="first name"
+                    {...accountInfoForm.getInputProps('firstName')}
+                    disabled={isSaving}
+                  />
+                  <TextInput
+                    label="Last name"
+                    placeholder="last name"
+                    {...accountInfoForm.getInputProps('lastName')}
+                    disabled={isSaving}
+                  />
+                </Group>
+                <Group grow>
+
+                  <TextInput
+                    label="Email"
+                    placeholder="email"
+                    {...accountInfoForm.getInputProps('email')}
+                    disabled={isSaving}
+                  />
+                  <TextInput
+                    label="Address"
+                    placeholder="address"
+                    {...accountInfoForm.getInputProps('address')}
+                    disabled={isSaving}
+                  />
+                </Group>
+                <TextInput
+                  label="Apartment/Studio/Floor"
+                  placeholder="apartment, studio, or floor"
+                  {...accountInfoForm.getInputProps('apartment')}
+                  disabled={isSaving}
+                />
+                <Group grow>
+                  <TextInput
+                    label="City"
+                    placeholder="city"
+                    {...accountInfoForm.getInputProps('city')}
+                    disabled={isSaving}
+                  />
+                  <TextInput
+                    label="State"
+                    placeholder="state"
+                    {...accountInfoForm.getInputProps('state')}
+                    disabled={isSaving}
+                  />
+                  <TextInput
+                    label="Zip"
+                    placeholder="zip"
+                    {...accountInfoForm.getInputProps('zip')}
+                    disabled={isSaving}
+                  />
+                </Group>
+              </Stack>
+            </Grid.Col>
+            <Grid.Col span={2}>
+              <ImageUploader
+                preset={UploadPreset.Avatar}
+                aspectRatio="1:1"
+                className="w-48 h-48"
+                onUploadSuccess={(result) => {
+                  accountInfoForm.setFieldValue('avatar', result.url);
+                }}
+                imageUrl={accountInfoForm.values.avatar}
+              />
+            </Grid.Col>
+          </Grid>
+
+
           <Box style={{ width: 'auto' }}>
             <Button
               leftSection={<IconDeviceFloppy size={16} />}

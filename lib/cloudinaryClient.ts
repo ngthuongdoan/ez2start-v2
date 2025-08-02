@@ -4,7 +4,7 @@ interface OptionalProps {
   invalidate?: boolean;
 }
 
-interface UploadResult {
+export interface UploadResult {
   url: string;
   id: string;
 }

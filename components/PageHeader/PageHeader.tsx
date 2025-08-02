@@ -29,8 +29,6 @@ type PageHeaderProps = {
 const PageHeader = (props: PageHeaderProps) => {
   const { withActions, breadcrumbItems, title, invoiceAction, ...others } =
     props;
-  const theme = useMantineTheme();
-  const colorScheme = useColorScheme();
 
   return (
     <>
@@ -47,7 +45,7 @@ const PageHeader = (props: PageHeaderProps) => {
           >
             <Stack gap={4}>
               <Title order={3}>{title}</Title>
-              <Text>Welcome back, Kelvin!</Text>
+              <Text>Welcome back!</Text>
             </Stack>
             <Flex align="center" gap="sm">
               <ActionIcon variant="subtle">
@@ -69,7 +67,7 @@ const PageHeader = (props: PageHeaderProps) => {
             <Button leftSection={<IconPlus size={18} />}>New Invoice</Button>
           </Flex>
         ) : (
-              <Stack gap="sm" pb="md">
+              <Stack gap="sm">
                 <Title order={3}>{title}</Title>
           </Stack>
         )}

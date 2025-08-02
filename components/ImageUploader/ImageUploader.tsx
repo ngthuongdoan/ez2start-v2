@@ -4,12 +4,12 @@ import { Button, FileButton, Image, Stack, StackProps, Text } from "@mantine/cor
 import { useState } from "react";
 import { IconCloudUpload } from "@tabler/icons-react";
 import { UploadPreset } from "@/lib/cloudinary";
-import { uploadFileClient } from "@/lib/cloudinaryClient";
+import { uploadFileClient, UploadResult } from "@/lib/cloudinaryClient";
 
 type ImageUploaderProps = {
   imageUrl?: string;
   defaultImageUrl?: string;
-  onUploadSuccess?: (url: string) => void;
+  onUploadSuccess?: (result: UploadResult) => void;
   onUploadError?: (error: Error) => void;
   folder?: string;
   width?: number;
@@ -19,7 +19,7 @@ type ImageUploaderProps = {
   description?: string;
   disabled?: boolean;
   preset: UploadPreset;
-  onUploadComplete?: (result: { url: string; id: string }) => void;
+  onUploadComplete?: (result: UploadResult) => void;
   maxSizeMB?: number;
   acceptedFileTypes?: string;
   imageId?: string;
@@ -29,7 +29,6 @@ type ImageUploaderProps = {
 
 const ImageUploader = ({
   preset,
-  onUploadComplete,
   maxSizeMB = 5,
   acceptedFileTypes = 'image/*',
   imageId,
@@ -59,9 +58,7 @@ const ImageUploader = ({
       console.log("🚀 ----------------------------------🚀")
       console.log("🚀 ~ handleUpload ~ result:", result)
       console.log("🚀 ----------------------------------🚀")
-
-      const url = result.url;
-      onUploadSuccess?.(url);
+      onUploadSuccess?.(result);
     } catch (error) {
       onUploadError?.(error instanceof Error ? error : new Error('Upload failed'));
     } finally {

@@ -90,42 +90,6 @@ const SettingContainer = (props: SettingContainerProps) => {
             <RoleSettings />
             <PositionSettings />
             <HelpSettings />
-            <div
-              id="shift"
-              data-section-id="shift"
-              className={`${styles['settings-section']} ${activeSection === 'shift' ? styles.active : ''}`}
-            >
-              <h2>Shift Settings</h2>
-              <p>Manage employee shift configurations.</p>
-              {/* Shift Settings Content */}
-            </div>
-            <div
-              id="role"
-              data-section-id="role"
-              className={`${styles['settings-section']} ${activeSection === 'role' ? styles.active : ''}`}
-            >
-              <h2>Role Management</h2>
-              <p>Configure user roles and permissions.</p>
-              {/* Role Settings Content */}
-            </div>
-            <div
-              id="position"
-              data-section-id="position"
-              className={`${styles['settings-section']} ${activeSection === 'position' ? styles.active : ''}`}
-            >
-              <h2>Position Settings</h2>
-              <p>Manage employee positions and titles.</p>
-              {/* Position Settings Content */}
-            </div>
-            <div
-              id="help"
-              data-section-id="help"
-              className={`${styles['settings-section']} ${activeSection === 'help' ? styles.active : ''}`}
-            >
-              <h2>Help & Documentation</h2>
-              <p>Find answers to common questions and learn how to use the system.</p>
-              {/* Help Content */}
-            </div>
           </Stack>
         </ScrollArea>
       </Grid.Col>

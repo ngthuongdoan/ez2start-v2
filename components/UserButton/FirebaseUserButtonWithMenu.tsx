@@ -1,20 +1,15 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
 import {
   Avatar,
   Group,
   Text,
   UnstyledButton,
-  UnstyledButtonProps,
-  Menu,
-  rem,
+  UnstyledButtonProps
 } from '@mantine/core';
-import { IconChevronRight, IconLogout, IconSettings } from '@tabler/icons-react';
-import { useServerAuth } from '@/hooks/useServerAuth';
-import { useUserProfile } from '@/hooks/useUserProfile';
-import { useRouter } from 'next/navigation';
-import { PATH_AUTH } from '@/routes';
+import { IconChevronRight } from '@tabler/icons-react';
+import { ReactNode, useEffect, useMemo } from 'react';
+import { useUserSettingQuery } from '../UserSettingDetailForm/UserSettingDetailForm.hook';
 import classes from './UserButton.module.css';
 
 type FirebaseUserButtonWithMenuProps = {
@@ -29,41 +24,29 @@ const FirebaseUserButtonWithMenu = ({
   showMenu = false,
   ...others
 }: FirebaseUserButtonWithMenuProps) => {
-  const { user, isAuthenticated } = useServerAuth();
-  const { profile } = useUserProfile();
-  const router = useRouter();
+  const { fetchUserData, user } = useUserSettingQuery();
 
-  if (!isAuthenticated || !user) {
-    return null;
-  }
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
-  // Use profile data if available, fallback to user data
-  const displayName = profile?.displayName || 
-                     profile?.firstName && profile?.lastName 
-                       ? `${profile.firstName} ${profile.lastName}`
-                       : user.name || 
-                         user.email?.split('@')[0] || 
-                         'User';
-  
-  const photoURL = profile?.photoURL || user.photoURL;
-  const avatarLetter = displayName.charAt(0).toUpperCase();
+  const displayName = useMemo(() => {
+    if (!user) return 'User';
+    return user.displayName ||
+      (user.firstName && user.lastName)
+      ? `${user.firstName} ${user.lastName}`
+      : user.name || user.email?.split('@')[0] || 'User';
+  }, [user]);
 
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-      });
-      router.push(PATH_AUTH.signin);
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  };
+  const avatarLetter = useMemo(() => {
+    return displayName.charAt(0).toUpperCase();
+  }, [displayName]);
 
-  const userButton = (
+  return (
     <UnstyledButton className={classes.user} {...others}>
       <Group>
-        <Avatar src={photoURL || null} radius="xl">
-          {!photoURL && avatarLetter}
+        <Avatar src={user?.avatar || null} radius="xl">
+          {!user?.avatar && avatarLetter}
         </Avatar>
 
         <div style={{ flex: 1 }}>
@@ -71,42 +54,13 @@ const FirebaseUserButtonWithMenu = ({
             {displayName}
           </Text>
 
-          <Text size="xs">{user.email}</Text>
+          <Text size="xs">{user?.email}</Text>
         </div>
 
         {icon && asAction && <IconChevronRight size="0.9rem" stroke={1.5} />}
       </Group>
     </UnstyledButton>
-  );
-
-  if (!showMenu) {
-    return userButton;
-  }
-
-  return (
-    <Menu shadow="md" width={200} position="top-end">
-      <Menu.Target>
-        {userButton}
-      </Menu.Target>
-
-      <Menu.Dropdown>
-        <Menu.Label>Account</Menu.Label>
-        <Menu.Item
-          leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
-        >
-          Settings
-        </Menu.Item>
-        <Menu.Divider />
-        <Menu.Item
-          color="red"
-          leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
-          onClick={handleLogout}
-        >
-          Logout
-        </Menu.Item>
-      </Menu.Dropdown>
-    </Menu>
-  );
+  )
 };
 
 export default FirebaseUserButtonWithMenu;
