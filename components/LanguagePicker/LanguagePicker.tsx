@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Group, Image, Menu, UnstyledButton } from '@mantine/core';
 import { IconChevronDown } from '@tabler/icons-react';
 import classes from './LanguagePicker.module.css';
+import { useTranslation } from 'react-i18next';
 
 const data = [
   {
@@ -12,24 +13,9 @@ const data = [
       'https://res.cloudinary.com/ddh7hfzso/image/upload/v1677783783/meal%20mart/english_njrlxm.png',
   },
   {
-    label: 'German',
+    label: 'Vietnamese',
     image:
-      'https://res.cloudinary.com/ddh7hfzso/image/upload/v1677783783/meal%20mart/german_a90o3b.png',
-  },
-  {
-    label: 'Italian',
-    image:
-      'https://res.cloudinary.com/ddh7hfzso/image/upload/v1677783783/meal%20mart/italian_ruxfnn.png',
-  },
-  {
-    label: 'French',
-    image:
-      'https://res.cloudinary.com/ddh7hfzso/image/upload/v1677783783/meal%20mart/french_yek0eo.png',
-  },
-  {
-    label: 'Polish',
-    image:
-      'https://res.cloudinary.com/ddh7hfzso/image/upload/v1677783783/meal%20mart/polish_wjp2xh.png',
+      'https://res.cloudinary.com/ddh7hfzso/image/upload/v1677783783/meal%20mart/vietnamese_ynqj5d.png',
   },
 ];
 
@@ -40,16 +26,24 @@ type LanguagePickerProps = {
 const LanguagePicker = ({ type }: LanguagePickerProps) => {
   const [opened, setOpened] = useState(false);
   const [selected, setSelected] = useState(data[0]);
+  const { t, i18n } = useTranslation();
+
   const items = data.map((item) => (
     <Menu.Item
       leftSection={<Image src={item.image} width={18} height={18} alt="flag" />}
-      onClick={() => setSelected(item)}
+      onClick={() => {
+        setSelected(item);
+        changeLanguage(item.label);
+      }}
       key={item.label}
     >
       {item.label}
     </Menu.Item>
   ));
 
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
   return (
     <Menu
       onOpen={() => setOpened(true)}

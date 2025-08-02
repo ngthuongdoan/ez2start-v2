@@ -17,7 +17,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { getQueryClient } from '@/utils/get-query-client';
 import NextProgressBar from 'nextjs-progressbar';
-
+import '@/lib/i18n'
 // If loading a variable font, you don't need to specify the font weight
 const openSans = Open_Sans({
   subsets: ['latin'],
