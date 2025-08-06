@@ -3,6 +3,10 @@ import { ImageUploader } from "@/components/ImageUploader/ImageUploader";
 import { UploadPreset } from "@/lib/cloudinary";
 import { Button, ColorInput, ComboboxData, getThemeColor, Grid, Group, noop, Paper, parseThemeColor, Select, Stack, TextInput, Title, useMantineColorScheme, useMantineTheme } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import axios from "axios";
+import { BusinessData } from "@/types/db"
+import { randomId } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 const COMPANY_SIZE_OPTIONS: ComboboxData = [
   {
     label: "Small (1-50 employees)",
@@ -80,6 +84,29 @@ const GeneralSettings = (props: GeneralSettingsProps) => {
     form.reset();
   };
 
+  const initData = async () => {
+    const body = {
+      businessId: randomId("business-id"),
+      ownerUid: randomId("owner-uid"),
+      businessData: {
+        business_name: form.values.companySize,
+        business_type: "f&b",
+      } as BusinessData
+    }
+    const response = await axios.post("/api/onboarding", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    console.log("🚀 ----------------------------------🚀")
+    console.log("🚀 ~ initData ~ response:", response)
+    console.log("🚀 ----------------------------------🚀")
+    notifications.show({
+      color: "green",
+      message: "Init business done"
+    })
+  }
   return (
     <Paper
       id="general"
@@ -162,9 +189,12 @@ const GeneralSettings = (props: GeneralSettingsProps) => {
             </Grid>
 
 
+            <Group justify="space-between" mt="md">
+              <Button variant="subtle" onClick={initData} type="button" color="gray">Create Data</Button>
             <Group justify="end" mt="md">
               <Button variant="default" onClick={handleCancel}>Cancel</Button>
               <Button type="submit">Save</Button>
+            </Group>
             </Group>
           </Stack>
         </form>
