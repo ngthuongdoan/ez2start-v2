@@ -1,7 +1,18 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { collection, getFirestore } from "firebase/firestore";
+import { collection, getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { createFirestoreConverter } from "../types/firestore-utils";
+import { 
+  UserDocument, 
+  BusinessDocument, 
+  EmployeeDocument,
+  ProductDocument,
+  CategoryDocument,
+  SupplierDocument,
+  CustomerDocument,
+  TransactionDocument
+} from "../types/schema";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
@@ -12,14 +23,73 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
 };
 
+// Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-const employees = collection(db, 'employees');
+// Enable offline persistence when in browser environment
+if (typeof window !== 'undefined') {
+  enableIndexedDbPersistence(db).catch((err) => {
+    console.error("Firebase persistence error:", err.code);
+  });
+}
 
+// Create type converters
+const userConverter = createFirestoreConverter<UserDocument>();
+const businessConverter = createFirestoreConverter<BusinessDocument>();
+const employeeConverter = createFirestoreConverter<EmployeeDocument>();
+const productConverter = createFirestoreConverter<ProductDocument>();
+const categoryConverter = createFirestoreConverter<CategoryDocument>();
+const supplierConverter = createFirestoreConverter<SupplierDocument>();
+const customerConverter = createFirestoreConverter<CustomerDocument>();
+const transactionConverter = createFirestoreConverter<TransactionDocument>();
+
+// Define collection references with type converters
 const collections = {
-  employees,
+  // Root collections
+  users: collection(db, 'users').withConverter(userConverter),
+  businesses: collection(db, 'businesses').withConverter(businessConverter),
+  
+  // Business subcollection generator functions
+  getEmployeesCollection: (businessId: string) => 
+    collection(db, `businesses/${businessId}/employees`).withConverter(employeeConverter),
+  
+  getProductsCollection: (businessId: string) => 
+    collection(db, `businesses/${businessId}/products`).withConverter(productConverter),
+  
+  getCategoriesCollection: (businessId: string) => 
+    collection(db, `businesses/${businessId}/categories`).withConverter(categoryConverter),
+  
+  getSuppliersCollection: (businessId: string) => 
+    collection(db, `businesses/${businessId}/suppliers`).withConverter(supplierConverter),
+  
+  getCustomersCollection: (businessId: string) => 
+    collection(db, `businesses/${businessId}/customers`).withConverter(customerConverter),
+  
+  getTransactionsCollection: (businessId: string) => 
+    collection(db, `businesses/${businessId}/transactions`).withConverter(transactionConverter),
 };
-export { auth, app, db, storage, collections };
+
+// Legacy collection references (for backward compatibility)
+const legacyCollections = {
+  employees: collection(db, 'employees'),
+};
+
+export { 
+  auth, 
+  app, 
+  db, 
+  storage, 
+  collections,
+  legacyCollections,
+  userConverter,
+  businessConverter,
+  employeeConverter,
+  productConverter,
+  categoryConverter,
+  supplierConverter,
+  customerConverter,
+  transactionConverter
+};

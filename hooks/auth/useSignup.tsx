@@ -1,8 +1,8 @@
-import { SignupBody } from "@/@types/auth";
+import { SignupBody } from "@/types/auth";
 import { PATH_AUTH } from "@/routes";
 import { createMutation } from "@/utils/create-mutation";
-import { notifications } from "@mantine/notifications";
 import { UseMutationOptions } from '@tanstack/react-query';
+import { notifications } from "@/utils/notifications";
 import { useRouter } from "next/navigation";
 
 export function useSignupMutation(options?: UseMutationOptions<unknown, unknown, SignupBody>) {
@@ -33,10 +33,10 @@ export const useSignup = () => {
       notifications.show({
         title: 'Account created',
         message: 'You can now sign in with your new account',
-        color: 'green',
+        type: 'success',
       }); router.push(PATH_AUTH.signin);
     } catch (error: any) {
-      notifications.show({ message: error.message, color: 'red' });
+      notifications.show({ message: error.message, type: 'error' });
     }
   };
 

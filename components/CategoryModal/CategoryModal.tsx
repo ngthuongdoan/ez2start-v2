@@ -1,13 +1,14 @@
 import { Modal, TextInput, Textarea, Select, Button, Group, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { Category, CategoryFormData } from '@/types';
+import { CategoryDocument } from '@/types/schema';
+import { CategoryFormData } from '@/types';
 
 interface CategoryModalProps {
   opened: boolean;
   onClose: () => void;
   mode: 'create' | 'edit';
-  category?: Category | null;
-  categories: Category[];
+  category?: CategoryDocument | null;
+  categories: CategoryDocument[];
   onSubmit: (data: CategoryFormData) => void;
 }
 
@@ -33,7 +34,7 @@ const CategoryModal = ({ opened, onClose, mode, category, categories, onSubmit }
     .filter(cat => cat.id !== category?.id && cat.parent_id !== category?.id)
     .map(cat => ({
       value: cat.id || '',
-      label: cat.name
+      label: cat.name || ''
     }));
 
   return (

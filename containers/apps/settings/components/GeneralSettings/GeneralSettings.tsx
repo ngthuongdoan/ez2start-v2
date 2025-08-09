@@ -6,7 +6,7 @@ import { useForm } from "@mantine/form";
 import axios from "axios";
 import { BusinessData } from "@/types/db"
 import { randomId } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
+import { notifications } from "@/utils/notifications";
 const COMPANY_SIZE_OPTIONS: ComboboxData = [
   {
     label: "Small (1-50 employees)",
@@ -93,19 +93,30 @@ const GeneralSettings = (props: GeneralSettingsProps) => {
         business_type: "f&b",
       } as BusinessData
     }
-    const response = await axios.post("/api/onboarding", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    console.log("🚀 ----------------------------------🚀")
-    console.log("🚀 ~ initData ~ response:", response)
-    console.log("🚀 ----------------------------------🚀")
-    notifications.show({
-      color: "green",
-      message: "Init business done"
-    })
+    try {
+
+      const response = await axios.post(
+        "/api/onboarding",
+        body,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      notifications.show({
+        message: response.data.message,
+        title: "Data Initialized",
+        type: "success",
+      })
+    } catch (error: any) {
+      notifications.show({
+        message: error.message,
+        title: "Error Initializing Data",
+        type: "error",
+      });
+    }
+
   }
   return (
     <Paper

@@ -11,13 +11,31 @@ import {
 } from '@mantine/core';
 import { Employee } from '@/types/employee';
 import { CustomModal, CustomModalProps } from '@/components/CustomModal/CustomModal';
-import { notifications } from '@mantine/notifications';
-
+import { notifications } from '@/utils/notifications';
+import { useForm } from '@mantine/form';
 type EmployeeModalProps ={
   onSuccess?: () => void;
   employee?: Employee | null; // For editing existing employee
   mode?: 'create' | 'edit';
 } & Omit<CustomModalProps, "actions">
+
+const INITIAL_EMPLOYEE: Employee = {
+  full_name: '',
+  email: '',
+  phone: '',
+  role: '',
+  permissions: [],
+  hourly_rate: 0,
+  username: '',
+  position: '',
+  assigned_shift: '',
+  dob: '', // Date of Birth
+  address: '', // Optional address field
+  business_id: '', // Ensure business_id is included
+  user_uid: '', // Ensure user_uid is included
+  employee_id: '', // This will be set when creating a new employee
+  is_active: true, // Default to active
+};
 
 export default function EmployeeModal({ 
   opened, 
@@ -28,50 +46,30 @@ export default function EmployeeModal({
   ...rest
 }: EmployeeModalProps) {
   const formId = useId();
-  const [form, setForm] = useState<Employee>(() => 
-    employee || {
-      name: '', 
-      phone: '', 
-      address: '', 
-      username: '', 
-      birth: '', 
-      position: '', 
-      salaryRate: 0, 
-      assignedShift: ''
-    }
-  );
+  const form = useForm<Employee>({
+    initialValues: INITIAL_EMPLOYEE,
+    validate: {
+      full_name: (value) => (value ? null : 'Full name is required'),
+      email: (value) => (value ? null : 'Email is required'),
+      phone: (value) => (value ? null : 'Phone number is required'),
+    },
+  });
+
   const [loading, setLoading] = useState(false);
 
   // Reset form when modal opens/closes or employee changes
   useEffect(() => {
-    if (opened) {
-      setForm(employee || {
-        name: '', 
-        phone: '', 
-        address: '', 
-        username: '', 
-        birth: '', 
-        position: '', 
-        salaryRate: 0, 
-        assignedShift: ''
-      });
+    if (opened && employee) {
+      form.setInitialValues(mode === 'edit' ? employee : INITIAL_EMPLOYEE);
     }
-  }, [opened, employee]);
-
-  const handleTextChange = (field: keyof Employee) => (value: string) => {
-    setForm({ ...form, [field]: value });
-  };
-
-  const handleNumberChange = (value: string | number) => {
-    setForm({ ...form, salaryRate: typeof value === 'string' ? parseFloat(value) || 0 : value });
-  };
+  }, [opened, employee, mode]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
     try {
-      const url = mode === 'create' ? '/api/employees' : `/api/employees/${employee?.id}`;
+      const url = mode === 'create' ? '/api/employees' : `/api/employees/${employee?.employee_id}`;
       const method = mode === 'create' ? 'POST' : 'PUT';
       
       const response = await fetch(url, {
@@ -84,21 +82,12 @@ export default function EmployeeModal({
         onSuccess?.();
         onClose();
         // Reset form for next use
-        setForm({
-          name: '', 
-          phone: '', 
-          address: '', 
-          username: '', 
-          birth: '', 
-          position: '', 
-          salaryRate: 0, 
-          assignedShift: ''
-        });
+        form.reset();
       } else {
-        notifications.show({ message: `Failed to ${mode} employee`, color: 'red' });
+        notifications.show({ message: `Failed to ${mode} employee`, type: 'error' });
       }
     } catch (error: any) {
-        notifications.show({ message: `Error ${mode === 'create' ? 'creating' : 'updating'} employee: ${error.message}`, color: 'red' });
+      notifications.show({ message: `Error ${mode === 'create' ? 'creating' : 'updating'} employee: ${error.message}`, type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -149,54 +138,47 @@ export default function EmployeeModal({
           <TextInput
             label="Full Name"
             placeholder="Enter employee's full name"
-            value={form.name}
-            onChange={(event) => handleTextChange('name')(event.currentTarget.value)}
             required
             disabled={loading}
+            {...form.getInputProps('full_name')}
           />
           
           <TextInput
             label="Phone Number"
             placeholder="Enter phone number"
-            value={form.phone}
-            onChange={(event) => handleTextChange('phone')(event.currentTarget.value)}
             required
             disabled={loading}
+            {...form.getInputProps('phone')}
           />
           
           <TextInput
             label="Address"
             placeholder="Enter address"
-            value={form.address}
-            onChange={(event) => handleTextChange('address')(event.currentTarget.value)}
             required
             disabled={loading}
+            {...form.getInputProps('address')}
           />
           
           <TextInput
             label="Username"
             placeholder="Enter username"
-            value={form.username}
-            onChange={(event) => handleTextChange('username')(event.currentTarget.value)}
             required
             disabled={loading}
+            {...form.getInputProps('username')}
           />
           
           <TextInput
             label="Date of Birth"
             placeholder="YYYY-MM-DD"
             type="date"
-            value={form.birth}
-            onChange={(event) => handleTextChange('birth')(event.currentTarget.value)}
             required
             disabled={loading}
+            {...form.getInputProps('dob')}
           />
           
           <Select
             label="Position"
             placeholder="Select position"
-            value={form.position}
-            onChange={(value) => handleTextChange('position')(value || '')}
             data={[
               'Manager',
               'Developer',
@@ -212,26 +194,24 @@ export default function EmployeeModal({
             searchable
             required
             disabled={loading}
+            {...form.getInputProps('position')}
           />
           
           <NumberInput
             label="Salary Rate (per hour)"
             placeholder="Enter hourly rate"
-            value={form.salaryRate}
-            onChange={handleNumberChange}
             min={0}
             step={0.01}
             prefix="$"
             decimalScale={2}
             required
             disabled={loading}
+            {...form.getInputProps('hourly_rate')}
           />
           
           <Select
             label="Assigned Shift"
             placeholder="Select shift"
-            value={form.assignedShift}
-            onChange={(value) => handleTextChange('assignedShift')(value || '')}
             data={[
               'Morning (6AM - 2PM)',
               'Afternoon (2PM - 10PM)',
@@ -242,6 +222,7 @@ export default function EmployeeModal({
             ]}
             required
             disabled={loading}
+            {...form.getInputProps('assigned_shift')}
           />
         </Stack>
       </form>

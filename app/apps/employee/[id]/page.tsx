@@ -35,7 +35,7 @@ export default function EmployeeDetailPage() {
   }, [id]);
 
   const handleDelete = async () => {
-    if (confirm(`Are you sure you want to delete ${employee?.name}?`)) {
+    if (confirm(`Are you sure you want to delete ${employee?.full_name}?`)) {
       try {
         await fetch(`/api/employees/${id}`, { method: 'DELETE' });
         router.push('/apps/employee');
@@ -57,7 +57,7 @@ export default function EmployeeDetailPage() {
         {employee && (
           <Stack gap="md">
             <Group justify="space-between" align="center">
-              <Title order={2}>{employee.name}</Title>
+              <Title order={2}>{employee.full_name}</Title>
               <Group>
                 <Button
                   variant="outline"
@@ -93,7 +93,7 @@ export default function EmployeeDetailPage() {
               
               <Group>
                 <Text fw={500}>Date of Birth:</Text>
-                <Text>{employee.birth}</Text>
+                <Text>{employee.dob}</Text>
               </Group>
               
               <Group>
@@ -102,13 +102,13 @@ export default function EmployeeDetailPage() {
               </Group>
               
               <Group>
-                <Text fw={500}>Salary Rate:</Text>
-                <Text fw={500} c="green">${employee.salaryRate}/hr</Text>
+                <Text fw={500}>Hourly Rate:</Text>
+                <Text fw={500} c="green">${employee.hourly_rate}/hr</Text>
               </Group>
               
               <Group>
                 <Text fw={500}>Assigned Shift:</Text>
-                <Badge variant="outline" color="green">{employee.assignedShift}</Badge>
+                <Badge variant="outline" color="green">{employee.assigned_shift}</Badge>
               </Group>
             </Stack>
           </Stack>

@@ -125,7 +125,7 @@ export function TableLayout<T extends Record<string, any>>({
       // Build query params for API
       const query = generateQueryParams({
         search: debouncedSearchQuery,
-        sortField: sortStatus?.columnAccessor || 'createdAt',
+        sortField: sortStatus?.columnAccessor || '',
         sortDirection: sortStatus?.direction || 'desc',
         page: page.toString(),
         pageSize: pageSize.toString(),

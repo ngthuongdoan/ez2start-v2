@@ -1,8 +1,43 @@
+/**
+ * Types Index
+ * 
+ * This file exports all types from the various type files for easy importing.
+ */
+
+// Basic Types
 export type Id = string | number;
 
+// Core Types
+export * from './core';
+
+// Module & Marketplace Types
+export * from './modules';
+
+// Inventory Types - maintain backward compatibility
+export * from './inventory';
+
+// Import new inventory types with prefixes to avoid conflicts
+import * as InventoryV2 from './inventory-v2';
+export { InventoryV2 };
+
+// POS Types
+export * from './pos';
+
+// Employee Management Types
+import * as EmployeeTypes from './employees';
+export { EmployeeTypes };
+
+// Financial Management Types
+export * from './financial';
+
+// Database Schema Types
+export * from './schema';
+
+// Legacy Types (maintain backward compatibility)
 export type KanbanColumn = {
   id: Id;
   title: string;
+  tasks?: KanbanTask[];
 };
 
 export type KanbanTask = {
@@ -50,6 +85,3 @@ export type Invoices = {
   client_name: string;
   client_company: string;
 };
-
-// Re-export inventory types
-export * from './inventory';
