@@ -1,7 +1,4 @@
 import { serverTimestamp } from "firebase/firestore";
-import { Employee } from "./employee";
-import { Category } from "./category";
-import { Business } from "./business";
 
 // Type definitions
 export interface BusinessData {
@@ -17,23 +14,51 @@ export interface BusinessData {
   owner_email?: string;
 }
 
-export interface BusinessDocument extends Business {
-  _id: string; // Firestore document ID
+export interface BusinessDocument {
+  business_id: string;
+  owner_uid: string;
+  business_name: string;
+  business_type: string;
+  address: string;
+  phone: string;
+  tax_number: string;
+  tax_rate: number;
+  currency: string;
+  timezone: string;
+  enabled_modules: string[];
+  module_settings: ModuleSettings;
   created_at: ReturnType<typeof serverTimestamp>;
   updated_at: ReturnType<typeof serverTimestamp>;
+  is_active: boolean;
 }
 
-export interface EmployeeDocument extends Employee {
-  _id: string; // Firestore document ID
+export interface EmployeeDocument {
+  employee_id: string;
+  business_id: string;
+  user_uid: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  role: string;
+  permissions: string[];
+  hourly_rate: number;
   created_at: ReturnType<typeof serverTimestamp>;
   updated_at: ReturnType<typeof serverTimestamp>;
+  is_active: boolean;
 }
 
-export interface CategoryDocument extends Category {
-  _id: string; // Firestore document ID
+export interface CategoryDocument {
+  category_id: string;
+  business_id: string;
+  name: string;
+  description: string;
+  color_code: string;
+  sort_order: number;
   created_at: ReturnType<typeof serverTimestamp>;
   updated_at: ReturnType<typeof serverTimestamp>;
+  is_active: boolean;
 }
+
 export interface ProductVariants {
   sizes?: string[];
   colors?: string[];

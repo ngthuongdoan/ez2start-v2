@@ -1,7 +1,7 @@
-import { LoginBody } from "@/types/auth";
+import { LoginBody } from "@/@types/auth";
 import { PATH_DASHBOARD } from "@/routes";
 import { createMutation } from "@/utils/create-mutation";
-import { notifications } from "@/utils/notifications";
+import { notifications } from "@mantine/notifications";
 import { UseMutationOptions } from '@tanstack/react-query';
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -32,13 +32,13 @@ export const useSignin = () => {
     try {
       await login(values);
     } catch (error: any) {
-      notifications.show({ message: error.message, type: "error" });
+      notifications.show({ message: error.message, color: 'red' });
     }
   };
 
   useEffect(() => {
     if (isSuccess && !isPending) {
-      notifications.show({ message: 'Login successful', type: 'success' });
+      notifications.show({ message: 'Login successful', color: 'green' });
       router.push(PATH_DASHBOARD.default);
     }
   }, [isSuccess, isPending]);

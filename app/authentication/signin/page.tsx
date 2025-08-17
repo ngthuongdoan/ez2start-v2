@@ -18,7 +18,7 @@ import {
 import { useForm } from '@mantine/form';
 import Link from 'next/link';
 import classes from './page.module.css';
-import { LoginBody } from '@/types/auth';
+import { LoginBody } from '@/@types/auth';
 
 const LINK_PROPS: TextProps = {
   className: classes.link,

@@ -1,5 +1,4 @@
-// import { initializeTenant } from "../../lib/initTenant";
-import { noop } from "@mantine/core";
+import { initializeTenant } from "@/lib/initTenant";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -8,7 +7,11 @@ export async function POST(req: NextRequest) {
     const { businessId, ownerUid, businessData } = body;
 
     // Create user & initialize tenant
-    const result = await noop();
+    const result = await initializeTenant(
+      businessId,
+      ownerUid,
+      businessData
+    );
 
     return NextResponse.json(result);
 

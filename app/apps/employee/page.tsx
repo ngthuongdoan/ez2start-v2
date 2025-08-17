@@ -17,9 +17,9 @@ export default function EmployeeListPage() {
   // Define table columns
   const columns: TableColumn<Employee>[] = [
     {
-      key: 'full_name',
+      key: 'name',
       title: 'Name',
-      accessor: 'full_name',
+      accessor: 'name',
       sortable: true,
       filterable: true,
     },
@@ -43,23 +43,23 @@ export default function EmployeeListPage() {
       ),
     },
     {
-      key: 'assigned_shift',
+      key: 'assignedShift',
       title: 'Shift',
-      accessor: 'assigned_shift',
+      accessor: 'assignedShift',
       sortable: true,
       filterable: true,
       render: (employee) => (
         <Badge variant="outline" color="green">
-          {employee.assigned_shift}
+          {employee.assignedShift}
         </Badge>
       ),
     },
     {
-      key: 'hourly_rate',
+      key: 'salaryRate',
       title: 'Salary Rate',
-      accessor: 'hourly_rate',
+      accessor: 'salaryRate',
       sortable: true,
-      render: (employee) => `$${employee.hourly_rate}/hr`,
+      render: (employee) => `$${employee.salaryRate}/hr`,
     },
     {
       key: 'phone',
@@ -80,7 +80,7 @@ export default function EmployeeListPage() {
     {
       label: 'View',
       icon: <IconEye size={16} />,
-      onClick: (employee) => router.push(`/apps/employee/${employee.employee_id}`),
+      onClick: (employee) => router.push(`/apps/employee/${employee.id}`),
       color: 'blue',
       variant: 'light',
     },
@@ -99,9 +99,9 @@ export default function EmployeeListPage() {
       label: 'Delete',
       icon: <IconTrash size={16} />,
       onClick: async (employee) => {
-        if (confirm(`Are you sure you want to delete ${employee.full_name}?`)) {
+        if (confirm(`Are you sure you want to delete ${employee.name}?`)) {
           try {
-            await fetch(`/api/employees/${employee.employee_id}`, {
+            await fetch(`/api/employees/${employee.id}`, {
               method: 'DELETE',
             });
             // Trigger table refresh
@@ -143,7 +143,7 @@ export default function EmployeeListPage() {
         filterable
         sortable
         pageSize={20}
-        onRowClick={(employee: Employee) => router.push(`/apps/employee/${employee.employee_id}`)}
+        onRowClick={(employee: Employee) => router.push(`/apps/employee/${employee.id}`)}
         onAdd={handleAddEmployee}
         emptyStateText="No employees found. Add your first employee to get started."
         key={refreshKey} // This will force re-render when refreshKey changes

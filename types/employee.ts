@@ -1,19 +1,12 @@
-import { serverTimestamp } from "firebase/firestore";
-
+// Employee type definition
 export interface Employee {
-  employee_id: string;
-  business_id: string;
-  user_uid: string;
-  full_name: string;
-  email: string;
+  id?: string;
+  name: string;
   phone: string;
-  role: string;
-  permissions: string[];
-  hourly_rate: number;
-  is_active: boolean;
-  username?: string;
-  position?: string;
-  assigned_shift?: string;
-  dob?: string; // Date of Birth
-  address?: string; // Optional address field
+  address: string;
+  username: string;
+  birth: string; // ISO date string
+  position: string;
+  salaryRate: number;
+  assignedShift: string;
 }
